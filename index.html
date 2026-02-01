@@ -115,9 +115,19 @@
       // do NOT auto-hide here; main.js will do it or show error text
     }, 2500);
   </script>
-
-  <script type="module" src="os/main.js"></script>
-  <script>
+  <script type="module">
+    const boot = document.getElementById("boot");
+    const sub = boot?.querySelector(".bootSub");
+    const hint = boot?.querySelector(".bootHint");
+    const set = (t) => { if (sub) sub.textContent = t; };
+    set("Loading modules…");
+    import("./os/main.js").then(()=>{ /* main handles UI */ }).catch((err)=>{
+      console.error("Startup import error:", err);
+      set("Startup error");
+      if (hint) hint.textContent = String(err && err.message ? err.message : err);
+    });
+  </script>
+<script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
     }
