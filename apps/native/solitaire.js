@@ -1,5 +1,5 @@
-window.TabletOSApps = window.TabletOSApps || {};
-window.TabletOSApps["solitaire"] = (root, api) => {
+window.YamanOSApps = window.YamanOSApps || {};
+window.YamanOSApps["solitaire"] = (root, api) => {
   // A compact, playable Klondike (click-to-move) implementation.
   // Drag & drop is intentionally avoided for iOS sanity.
   const SUITS = ["♠","♥","♦","♣"];

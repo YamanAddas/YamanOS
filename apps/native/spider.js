@@ -1,5 +1,5 @@
-window.TabletOSApps = window.TabletOSApps || {};
-window.TabletOSApps["spider"] = (root, api) => {
+window.YamanOSApps = window.YamanOSApps || {};
+window.YamanOSApps["spider"] = (root, api) => {
   // Simplified Spider Solitaire (single suit) - click-to-move sequences.
   // Rules: build down by rank. Completed K->A sequences are removed.
   const SUIT="♠";

@@ -1,5 +1,5 @@
-window.TabletOSApps = window.TabletOSApps || {};
-window.TabletOSApps["mahjong"] = (root, api) => {
+window.YamanOSApps = window.YamanOSApps || {};
+window.YamanOSApps["mahjong"] = (root, api) => {
   // Simplified Mahjong (match two of the same tile if both are "free"):
   // A tile is free if it has no tile immediately left or right.
   // Layout: single layer grid. This is not full 3D Mahjong solitaire, but it's playable.

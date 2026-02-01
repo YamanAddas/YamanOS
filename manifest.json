@@ -1,11 +1,11 @@
 {
-  "name": "TabletOS",
-  "short_name": "TabletOS",
+  "name": "YamanOS",
+  "short_name": "YamanOS",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0b0c0f",
-  "theme_color": "#0b0c0f",
+  "background_color": "#0b0c10",
+  "theme_color": "#0b0c10",
   "icons": [
     {
       "src": "assets/icon-192.png",

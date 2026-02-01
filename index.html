@@ -2,46 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <!-- iOS/PWA-friendly viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-
-  <!-- iOS "Add to Home Screen" -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="TabletOS" />
-
-  <meta name="theme-color" content="#0b0c0f" />
-  <title>TabletOS</title>
+  <meta name="apple-mobile-web-app-title" content="YamanOS" />
+  <meta name="theme-color" content="#0b0c10" />
+  <title>YamanOS</title>
 
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="assets/icon-192.png" />
   <link rel="apple-touch-icon" href="assets/icon-180.png" />
-
-  <link rel="stylesheet" href="os/os.css?v=20260201111047" />
+  <link rel="stylesheet" href="os/os.css?v=20260201113923" />
 </head>
 <body>
-  <div id="boot" class="boot" aria-label="Boot screen">
+  <div id="boot" class="boot">
     <div class="boot-card">
-      <div class="boot-logo">⊞</div>
-      <div class="boot-title">TabletOS</div>
-      <div class="boot-sub">Windows-like tablet shell (PWA)</div>
+      <div class="boot-logo">Y</div>
+      <div class="boot-title">YamanOS</div>
+      <div class="boot-sub">Personal tablet desktop • PWA</div>
       <div class="boot-progress"><div class="boot-bar"></div></div>
-      <div class="boot-hint">
-        iPad tip: open in Safari → Share → <b>Add to Home Screen</b> for full-screen mode.
-      </div>
+      <div class="boot-hint">iPad: Safari → Share → <b>Add to Home Screen</b>.</div>
     </div>
   </div>
 
-  <div id="os" class="os hidden" aria-label="TabletOS">
+  <div id="os" class="os hidden">
     <div class="wallpaper" aria-hidden="true"></div>
 
-    <header class="topbar" aria-label="Top bar">
+    <header class="topbar">
       <div class="topbar-left">
-        <button class="iconbtn" id="btnStart" title="Start">⊞</button>
-        <div class="breadcrumbs" id="breadcrumbs">Desktop</div>
+        <button class="iconbtn" id="btnStart" title="Start">Y</button>
+        <div class="crumbs" id="crumbs"></div>
       </div>
       <div class="topbar-right">
-        <button class="iconbtn" id="btnSearch" title="Search apps">🔎</button>
         <button class="iconbtn" id="btnTheme" title="Toggle theme">🌙</button>
         <div class="clock" id="clock">--:--</div>
       </div>
@@ -49,36 +41,37 @@
 
     <main class="desktop" id="desktop" aria-label="Desktop"></main>
 
-    <footer class="taskbar" aria-label="Taskbar">
-      <div class="taskbar-left">
-        <button class="taskbtn" id="taskStart" title="Start">⊞</button>
-        <button class="taskbtn" id="taskTaskView" title="Task View">▦</button>
-      </div>
-      <div class="taskbar-center" id="taskbarApps" aria-label="Pinned apps"></div>
-      <div class="taskbar-right">
-        <button class="taskbtn" id="taskWifi" title="Offline/Online">📶</button>
-        <button class="taskbtn" id="taskNotif" title="Notifications">🔔</button>
+    <footer class="taskbar">
+      <div class="taskbar-glass">
+        <div class="taskbar-center">
+          <button class="dockbtn" id="taskStart" title="Start">Y</button>
+          <button class="dockbtn" data-app="fileExplorer" title="Files">📁</button>
+          <button class="dockbtn" data-app="browser" title="Browser">🌐</button>
+          <button class="dockbtn" data-app="notes" title="Notes">📝</button>
+          <button class="dockbtn" data-app="minesweeper" title="Minesweeper">💣</button>
+        </div>
+        <div class="taskbar-right">
+          <button class="dockbtn" id="taskWifi" title="Network">📶</button>
+          <button class="dockbtn" id="taskNotif" title="Notifications">🔔</button>
+        </div>
       </div>
     </footer>
 
-    <section class="panel start hidden" id="startMenu" aria-label="Start menu">
+    <section class="panel start hidden" id="startMenu">
       <div class="start-top">
         <div class="start-title">Start</div>
-        <input id="startSearch" class="start-search" placeholder="Type to search apps..." autocomplete="off" />
+        <input id="startSearch" class="start-search" placeholder="Search apps & files..." autocomplete="off" />
       </div>
       <div class="start-grid" id="startGrid"></div>
       <div class="start-bottom">
         <button class="pill" id="btnInstall">Install</button>
-        <button class="pill" id="btnExport">Export Data</button>
-        <label class="pill file">
-          Import Data
-          <input type="file" id="btnImport" accept="application/json" />
-        </label>
+        <button class="pill" id="btnExport">Export</button>
+        <label class="pill file">Import<input type="file" id="btnImport" accept="application/json"></label>
         <button class="pill danger" id="btnReset">Reset</button>
       </div>
     </section>
 
-    <section class="panel notif hidden" id="notifPanel" aria-label="Notifications">
+    <section class="panel notif hidden" id="notifPanel">
       <div class="panel-title">Notifications</div>
       <div class="panel-body" id="notifBody"></div>
       <div class="panel-footer">
@@ -86,35 +79,15 @@
       </div>
     </section>
 
-    <!-- Web App Modal Overlay -->
-    <div class="overlay hidden" id="overlay" role="dialog" aria-modal="true">
-      <div class="overlay-backdrop" id="overlayBackdrop"></div>
-      <div class="overlay-card">
-        <div class="overlay-top">
-          <div class="overlay-title" id="overlayTitle">App</div>
-          <div class="overlay-actions">
-            <button class="iconbtn" id="overlayPop" title="Open in a new tab">↗</button>
-            <button class="iconbtn" id="overlayClose" title="Close">✕</button>
-          </div>
-        </div>
-        <div class="overlay-body" id="overlayBody"></div>
-        <div class="overlay-bottom" id="overlayBottom">
-          <div class="overlay-note" id="overlayNote"></div>
-          <div class="overlay-controls">
-            <button class="pill" id="overlayOpen">Open</button>
-            <button class="pill" id="overlayBack">Back to OS</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Windows layer -->
+    <div class="window-layer" id="windowLayer"></div>
 
-    <!-- Windows for native apps -->
-    <div class="window-layer" id="windowLayer" aria-label="Windows"></div>
+    <!-- Context menu -->
+    <div class="ctx hidden" id="ctx"></div>
   </div>
 
-  <script src="os/os.js?v=20260201111047"></script>
+  <script src="os/os.js?v=20260201113923"></script>
   <script>
-    // Service Worker registration (works only on HTTPS or localhost)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./service-worker.js');
     }

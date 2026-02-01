@@ -1,13 +1,16 @@
-const CACHE = "tabletos-20260201111047";
+const CACHE = "yamanos-20260201113923";
 const CORE = [
   "./",
   "./index.html",
   "./manifest.json",
+  "./service-worker.js",
   "./os/os.css",
   "./os/os.js",
   "./apps/native/notes.js",
   "./apps/native/calculator.js",
   "./apps/native/minesweeper.js",
+  "./apps/native/fileExplorer.js",
+  "./apps/native/browser.js",
   "./apps/native/solitaire.js",
   "./apps/native/spider.js",
   "./apps/native/mahjong.js",
@@ -33,7 +36,6 @@ self.addEventListener("activate", (event) => {
   })());
 });
 
-// Cache-first for same-origin assets, network-first for cross-origin.
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   const url = new URL(req.url);
