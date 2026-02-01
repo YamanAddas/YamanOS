@@ -1,3 +1,2 @@
-# YamanOS v2
-
-Upload to GitHub Pages (root).
+# YamanOS (PWA Launcher)
+Open `CHECKPOINT.md` first.
