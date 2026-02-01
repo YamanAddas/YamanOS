@@ -115,22 +115,27 @@
       // do NOT auto-hide here; main.js will do it or show error text
     }, 2500);
   </script>
+  
+  <script>
+    // DEBUG: proves this HTML version loaded and JS can run.
+    (function(){
+      const b=document.getElementById("boot");
+      const sub=b && b.querySelector(".bootSub");
+      if(sub){ sub.textContent = "v0.3.3 debug: inline JS ran"; }
+    })();
+  </script>
+
   <script type="module">
     const boot = document.getElementById("boot");
     const sub = boot?.querySelector(".bootSub");
     const hint = boot?.querySelector(".bootHint");
     const set = (t) => { if (sub) sub.textContent = t; };
     set("Loading modules…");
-    import("./os/main.js").then(()=>{ /* main handles UI */ }).catch((err)=>{
+    import("./os/main.js?v=033").then(()=>{ /* main handles UI */ }).catch((err)=>{
       console.error("Startup import error:", err);
       set("Startup error");
       if (hint) hint.textContent = String(err && err.message ? err.message : err);
     });
-  </script>
-<script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
-    }
   </script>
 </body>
 </html>
