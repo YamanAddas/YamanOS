@@ -630,4 +630,10 @@ async function boot(){
   }, 650);
 }
 
-boot();
+(async ()=>{try{await boot();}catch(err){console.error(err);
+const bootEl=document.getElementById('boot');
+if(bootEl){const sub=bootEl.querySelector('.bootSub'); if(sub) sub.textContent='Startup error (see console)';
+const hint=bootEl.querySelector('.bootHint'); if(hint) hint.textContent=String(err&&err.message?err.message:err);
+}
+setTimeout(()=>{const b=document.getElementById('boot'); const o=document.getElementById('os'); if(b) b.classList.add('hidden'); if(o) o.classList.remove('hidden');},800);
+}})();

@@ -1,4 +1,4 @@
-const CACHE_NAME = "yamanos-v0_3-cache";
+const CACHE_NAME = "yamanos-v0_3_1-cache";
 const CORE = ["./","./index.html","./manifest.webmanifest","./service-worker.js","./os/main.js","./os/registry.js","./os/storage.js","./os/windowManager.js","./os/ui/shell.css"];
 const ASSETS = ["./os/assets/icon-180.png","./os/assets/icon-192.png","./os/assets/icon-256.png","./os/assets/icon-512.png","./os/assets/wallpapers/abstract.png","./os/assets/wallpapers/nature.png","./os/assets/wallpapers/horror.png"];
 self.addEventListener("install", (event) => {

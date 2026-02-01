@@ -102,6 +102,20 @@
     <div class="toast" id="toast" aria-live="polite"></div>
   </div>
 
+  
+  <script>
+    // Safety: if something goes wrong, don't leave the boot screen forever.
+    setTimeout(() => {
+      const b = document.getElementById("boot");
+      const o = document.getElementById("os");
+      if (b && !b.classList.contains("hidden")) {
+        const sub = b.querySelector(".bootSub");
+        if (sub) sub.textContent = "Taking longer than expected…";
+      }
+      // do NOT auto-hide here; main.js will do it or show error text
+    }, 2500);
+  </script>
+
   <script type="module" src="os/main.js"></script>
   <script>
     if ("serviceWorker" in navigator) {
