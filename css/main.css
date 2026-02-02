@@ -9,12 +9,17 @@
 :root{
   --glass-bg: rgba(255, 255, 255, 0.06);
   --glass-bg-2: rgba(255, 255, 255, 0.08);
+  --glass-window-bg: rgba(16, 18, 24, 0.55);
+  --glass-dock-bg: rgba(16, 18, 24, 0.62);
+  --glass-header-bg: rgba(20, 22, 30, 0.68);
   --glass-border: rgba(255, 255, 255, 0.12);
   --glass-border-2: rgba(255, 255, 255, 0.18);
+  --glass-highlight: rgba(255, 255, 255, 0.2);
   --text: rgba(255, 255, 255, 0.92);
   --muted: rgba(255, 255, 255, 0.62);
   --muted2: rgba(255, 255, 255, 0.42);
   --shadow: rgba(0, 0, 0, 0.55);
+  --shadow-strong: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   --glow: rgba(120, 190, 255, 0.28);
   --glow2: rgba(160, 120, 255, 0.22);
   --radius-md: 18px;
@@ -27,12 +32,17 @@
 :root[data-theme="light"]{
   --glass-bg: rgba(255, 255, 255, 0.45);
   --glass-bg-2: rgba(255, 255, 255, 0.65);
+  --glass-window-bg: rgba(255, 255, 255, 0.7);
+  --glass-dock-bg: rgba(255, 255, 255, 0.75);
+  --glass-header-bg: rgba(255, 255, 255, 0.8);
   --glass-border: rgba(0, 0, 0, 0.10);
   --glass-border-2: rgba(0, 0, 0, 0.20);
+  --glass-highlight: rgba(0, 0, 0, 0.08);
   --text: #1a1d21;
   --muted: rgba(0, 0, 0, 0.60);
   --muted2: rgba(0, 0, 0, 0.40);
   --shadow: rgba(0, 0, 0, 0.10);
+  --shadow-strong: 0 25px 50px -12px rgba(0, 0, 0, 0.18);
   --glow: rgba(0, 100, 255, 0.20);
   --glow2: rgba(100, 50, 200, 0.15);
 }
@@ -210,6 +220,74 @@ body.theme-light{
   transform: translateY(-1px);
 }
 .hud-btn:active{ transform: translateY(0px); }
+
+/* ============================================================
+   GLASS THEME (Dock + Windows)
+   ============================================================ */
+.dock-container{
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 24px;
+  border: 1px solid var(--glass-highlight);
+  background: var(--glass-dock-bg);
+  box-shadow: var(--shadow-strong);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 999998;
+}
+
+.dock-container .dock-item{
+  display: grid;
+  place-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 180ms ease;
+}
+
+.dock-container .dock-item:hover{
+  transform: translateY(-2px) scale(1.05);
+}
+
+.dock-container .dock-icon{
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+}
+
+.dock-container .dock-item:hover .dock-icon{
+  transform: scale(1.08);
+  box-shadow: 0 16px 30px rgba(0,0,0,0.4);
+}
+
+.window-frame{
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-lg);
+  background: var(--glass-window-bg);
+  box-shadow: var(--shadow-strong);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow: hidden;
+}
+
+.window-header{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.14);
+  background: var(--glass-header-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  font-family: var(--sans);
+}
 
 .hud-cmd-wrap{
   width: min(560px, calc(100vw - 180px));
