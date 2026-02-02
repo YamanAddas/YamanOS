@@ -1,0 +1,434 @@
+/* =====================================================================
+   YamanOS v0.4 — MASTER STYLESHEET (OS ONLY)
+   - Canvas + Nodes
+   - HUD + Toast + Files Drawer
+   - App Runner Overlay
+   NOTE: Browser styles moved to css/browser.css
+   ===================================================================== */
+
+:root{
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-bg-2: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-border-2: rgba(255, 255, 255, 0.18);
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.62);
+  --muted2: rgba(255, 255, 255, 0.42);
+  --shadow: rgba(0, 0, 0, 0.55);
+  --glow: rgba(120, 190, 255, 0.28);
+  --glow2: rgba(160, 120, 255, 0.22);
+  --radius-md: 18px;
+  --radius-lg: 22px;
+  --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Light theme overrides */
+:root[data-theme="light"]{
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-bg-2: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(0, 0, 0, 0.10);
+  --glass-border-2: rgba(0, 0, 0, 0.20);
+  --text: #1a1d21;
+  --muted: rgba(0, 0, 0, 0.60);
+  --muted2: rgba(0, 0, 0, 0.40);
+  --shadow: rgba(0, 0, 0, 0.10);
+  --glow: rgba(0, 100, 255, 0.20);
+  --glow2: rgba(100, 50, 200, 0.15);
+}
+
+html, body{
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--sans);
+  color: var(--text);
+  background:
+    radial-gradient(1200px 800px at 50% 30%, #141821 0%, #07090d 60%, #050608 100%),
+    radial-gradient(900px 600px at 12% 90%, rgba(120,190,255,0.09), transparent 55%),
+    radial-gradient(900px 600px at 88% 90%, rgba(160,120,255,0.08), transparent 55%);
+  transition: background 220ms ease, color 220ms ease;
+}
+
+body.theme-light{
+  background:
+    radial-gradient(1200px 800px at 50% 30%, #f0f4f8 0%, #d9e2ec 60%, #bcccdc 100%),
+    radial-gradient(900px 600px at 12% 90%, rgba(255,255,255,0.4), transparent 55%);
+  color: #1a1d21;
+}
+
+/* ============================================================
+   CANVAS
+   ============================================================ */
+#canvas{
+  position: fixed;
+  inset: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+  cursor: grab;
+}
+#canvas.grabbing{ cursor: grabbing; }
+
+/* ============================================================
+   NODES
+   ============================================================ */
+.node{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 260px;
+  min-height: 84px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05)),
+    radial-gradient(120px 80px at 18% 18%, rgba(120,190,255,0.12), transparent 60%),
+    radial-gradient(120px 80px at 88% 20%, rgba(160,120,255,0.10), transparent 60%);
+  box-shadow:
+    0 16px 40px rgba(0,0,0,0.46),
+    inset 0 1px 0 rgba(255,255,255,0.10);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  user-select: none;
+  transition: border-color 140ms ease, transform 140ms ease, background 140ms ease, box-shadow 160ms ease;
+}
+
+.node:hover{
+  border-color: var(--glass-border-2);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06)),
+    radial-gradient(140px 90px at 18% 18%, rgba(120,190,255,0.14), transparent 62%),
+    radial-gradient(140px 90px at 88% 20%, rgba(160,120,255,0.12), transparent 62%);
+}
+
+.node[data-active="true"],
+.node.is-running{
+  border-color: rgba(160, 220, 255, 0.30);
+  box-shadow:
+    0 18px 55px rgba(0,0,0,0.56),
+    0 0 0 1px rgba(120,190,255,0.20),
+    0 0 22px var(--glow),
+    0 0 36px var(--glow2),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+}
+
+/* Optional class your surface.js can set for URL nodes */
+.node.node-url{
+  border-color: rgba(120, 255, 210, 0.22);
+}
+.node.node-url:hover{
+  border-color: rgba(120, 255, 210, 0.34);
+}
+
+.node-inner{
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 12px;
+  padding: 14px 14px 12px;
+  align-items: center;
+}
+
+.node-icon{
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 10px 24px rgba(0,0,0,0.35);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.node-label{
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.90;
+}
+
+.node-sub{
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+
+/* ============================================================
+   HUD
+   ============================================================ */
+#hud{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 999999;
+}
+
+.hud-bar{
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: rgba(10, 12, 16, 0.58);
+  box-shadow:
+    0 18px 44px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.09);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.hud-btn{
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
+}
+.hud-btn:hover{
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.18);
+  transform: translateY(-1px);
+}
+.hud-btn:active{ transform: translateY(0px); }
+
+.hud-cmd-wrap{
+  width: min(560px, calc(100vw - 180px));
+}
+.hud-cmd{
+  width: 100%;
+  height: 38px;
+  border-radius: 999px;
+  padding: 0 14px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  outline: none;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.hud-cmd::placeholder{ color: var(--muted); }
+.hud-cmd:focus{
+  border-color: rgba(160, 220, 255, 0.26);
+  box-shadow: 0 0 0 4px rgba(120,190,255,0.10);
+}
+
+/* ============================================================
+   FILES DRAWER (if your surface.js uses it)
+   ============================================================ */
+.files-drawer{
+  pointer-events: auto;
+  position: fixed;
+  right: 14px;
+  bottom: 78px;
+  width: 340px;
+  max-height: 60vh;
+  border-radius: 18px;
+  border: 1px solid var(--glass-border);
+  background: rgba(10, 12, 16, 0.64);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.58);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
+  transform: translateY(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease, transform 140ms ease;
+  color: var(--text);
+}
+.files-drawer[data-open="true"]{
+  opacity: 1;
+  transform: translateY(0px);
+  pointer-events: auto;
+}
+.files-drawer-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 12px 10px;
+  border-bottom: 1px solid var(--glass-border);
+}
+.files-title{
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.90;
+}
+.files-drawer-body{ padding: 12px; overflow: auto; }
+.files-hint{
+  font-size: 12px;
+  opacity: 0.62;
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+#toast{
+  position: fixed;
+  left: 50%;
+  bottom: 82px;
+  transform: translateX(-50%);
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: rgba(10, 12, 16, 0.78);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.60);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease, transform 140ms ease;
+  z-index: 1000000;
+  max-width: min(720px, calc(100vw - 40px));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--text);
+}
+#toast[data-show="true"]{
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
+#toast[data-error="true"]{
+  border-color: rgba(255, 90, 90, 0.25);
+  background: rgba(60, 10, 10, 0.55);
+}
+
+/* ============================================================
+   APP RUNNER OVERLAY
+   ============================================================ */
+#appLayer{
+  position: fixed;
+  inset: 0;
+  z-index: 1000001;
+  pointer-events: none;
+}
+
+.app-panel{
+  position: fixed;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,0.14);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+  box-shadow:
+    0 28px 90px rgba(0,0,0,0.72),
+    0 0 0 1px rgba(120,190,255,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.10);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  overflow: hidden;
+  pointer-events: auto;
+  transition:
+    left 220ms ease,
+    top 220ms ease,
+    width 220ms ease,
+    height 220ms ease,
+    opacity 200ms ease,
+    transform 220ms ease;
+  color: var(--text);
+}
+
+.app-panel.raise{
+  box-shadow:
+    0 32px 110px rgba(0,0,0,0.78),
+    0 0 26px rgba(120,190,255,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+}
+
+.app-chrome{
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.12);
+}
+
+.app-title{ display: flex; align-items: center; gap: 10px; }
+.app-dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(120,190,255,0.65);
+  box-shadow: 0 0 14px rgba(120,190,255,0.35);
+}
+.app-name{
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  opacity: 0.92;
+}
+
+.app-actions{ display: flex; gap: 8px; }
+.app-close{
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.90);
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.app-close:hover{
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.18);
+}
+
+.app-content{
+  height: calc(100% - 54px);
+  overflow: auto;
+  padding: 14px;
+}
+
+/* fallback content */
+.app-fallback{
+  height: 100%;
+  border-radius: 18px;
+  border: 1px dashed rgba(255,255,255,0.16);
+  background: rgba(0,0,0,0.14);
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  text-align: center;
+}
+.app-fallback-title{
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+.app-fallback-sub{
+  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+  line-height: 1.4;
+}

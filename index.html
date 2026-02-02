@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <!-- PWA / standalone -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
+  <link rel="icon" href="./assets/icons/yamanos.svg" type="image/svg+xml" />
+  <link rel="icon" href="./assets/icons/start.png" type="image/png" />
+
+  <title>YamanOS v0.4</title>
+
+  <!-- OS styles -->
+  <link rel="stylesheet" href="./css/main.css" />
+  <link rel="stylesheet" href="./css/shell.css" />
+  <link rel="stylesheet" href="./css/browser.css" />
+</head>
+
+<body>
+  <!-- Boot overlay -->
+  <div id="boot" class="boot">
+    <div class="boot-card">
+      <div class="boot-logo">Y</div>
+      <div class="boot-title">YamanOS</div>
+      <div class="boot-sub">v0.4 • Booting…</div>
+    </div>
+  </div>
+
+  <!-- OS root -->
+  <div id="app" class="os-root" hidden></div>
+
+  <script type="module" src="./os/main.js"></script>
+</body>
+</html>

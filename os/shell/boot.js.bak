@@ -1,0 +1,225 @@
+import { el, qs } from '../utils/dom.js';
+import { loadTheme, setTheme } from '../theme/theme.js';
+import { registry } from '../registry.js';
+import { WindowManager } from './windowManager.js';
+import { Taskbar } from './taskbar.js';
+import { StartMenu } from './startMenu.js';
+import { Desktop } from './desktop.js';
+import { mountContextMenu, show as showCtx, hide as hideCtx } from './contextMenu.js';
+import { mountToasts, toast } from './toast.js';
+import { ensureFileSystem } from '../../apps/files/fsSeed.js';
+import { kvGet, kvSet, filePut } from '../storage/db.js';
+import { getDeviceInfo } from '../utils/device.js';
+
+export async function boot(){
+  // quick hardening: never register SW in v0.3.0
+  const bootEl = qs('#boot');
+  const app = qs('#app');
+
+  await loadTheme();
+  await ensureFileSystem();
+
+  app.hidden=false;
+  bootEl.remove();
+
+  const shell = el('div',{class:'shell'});
+  app.append(shell);
+
+  mountContextMenu(shell);
+  mountToasts(shell);
+
+  const startMenu = new StartMenu({
+    root: shell,
+    onOpenApp: (id, opts)=>openEntry({kind:'app', id}, opts),
+    onOpenFolder: (id)=>openEntry({kind:'folder', id}),
+    onOpenPortal: (url, title)=>openPortal(url, title)
+  });
+
+  const taskbar = new Taskbar({
+    root: shell,
+    registry,
+    onOpenApp: (id, opts)=>openEntry(id==='games'?{kind:'folder', id:'games'}:{kind:'app', id}, opts),
+    onToggleStart: ()=>{
+      if(startMenu.el.style.display==='flex') startMenu.hide();
+      else { taskbar.hidePanels(); startMenu.show(); }
+    },
+    onToggleNotifs: ()=>{
+      if(taskbar.notifPanel.style.display==='flex') taskbar.hidePanels();
+      else { startMenu.hide(); taskbar.showNotifs(); }
+    },
+    onToggleClock: ()=>{
+      if(taskbar.clockPanel.style.display==='flex') taskbar.hidePanels();
+      else { startMenu.hide(); taskbar.showClock(); }
+    },
+    onToggleTheme: async()=>{
+      const cur=document.documentElement.dataset.theme==='light'?'light':'dark';
+      const next = cur==='light' ? 'dark' : 'light';
+      await setTheme(next);
+      await toast('Theme', next==='light'?'Light mode':'Dark mode');
+    }
+  });
+
+  const wm = new WindowManager({ root: shell, taskbar, registry, openApp: openEntry });
+
+  const desktop = new Desktop({
+    root: shell,
+    registry,
+    contextMenu: { show: showCtx, hide: hideCtx },
+    onOpenEntry: (it)=>openEntry(it)
+  });
+  await desktop.init();
+  desktop.onBackgroundTap = ()=>{ hideCtx(); };
+  desktop.onBackgroundContext = (pos)=>{
+    const items=[
+      {label:'New Folder', on: async()=>{ await createFolderOnDesktop(); }},
+      {label:'New Note', on: async()=>{ await createNoteOnDesktop(); }},
+      {label:'New Shortcut', on: async()=>{ await createShortcutOnDesktop(); }}
+    ];
+    showCtx(pos, items);
+  };
+
+  // Expose minimal shell API for apps
+  const shellAPI = {
+    openEntry,
+    openPortal,
+    toast,
+    desktop,
+    wm,
+    startMenu,
+    taskbar,
+    registry,
+  };
+
+  async function openPortal(url, title='Portal'){
+    window.open(url, '_blank', 'noopener,noreferrer');
+    await toast('Opening', `${title} in a new tab.`);
+  }
+
+  async   async function addDesktopIcon(entry){
+    const current = (await kvGet('desktop.items')) || [];
+    const items = Array.isArray(current) ? current : [];
+    items.push(entry);
+    await kvSet('desktop.items', items);
+    desktop.items = items;
+    desktop.render();
+  }
+
+  async function createFolderOnDesktop(){
+    const name = prompt('Folder name:', 'New Folder');
+    if(!name) return;
+    const id='fld_'+crypto.randomUUID();
+    await filePut({ id, type:'folder', name, parent:'fld_desktop', created: Date.now(), modified: Date.now() });
+    await toast('Created', `Folder "${name}" created in Desktop.`);
+  }
+
+  async function createNoteOnDesktop(){
+    const title = prompt('Note title:', 'New Note');
+    if(!title) return;
+    const id='note_'+crypto.randomUUID();
+    await filePut({ id, type:'file', fileType:'note', name:title, parent:'fld_desktop', content:'', created: Date.now(), modified: Date.now() });
+    await addDesktopIcon({ kind:'file', id, fileType:'note', title, icon: registry.apps['notes']?.icon });
+    openEntry({kind:'app', id:'notes', params:{ fileId: id }});
+  }
+
+  async function createShortcutOnDesktop(){
+    const title = prompt('Shortcut name:', 'New Shortcut');
+    if(!title) return;
+    const url = prompt('URL (https://...)', 'https://');
+    if(!url) return;
+    const id='sc_'+crypto.randomUUID();
+    await filePut({ id, type:'file', fileType:'shortcut', name:title, parent:'fld_desktop', url, icon:null, created: Date.now(), modified: Date.now() });
+    await addDesktopIcon({ kind:'file', id, fileType:'shortcut', title, url, icon: registry.apps['browser']?.icon });
+    await toast('Created', `Shortcut "${title}" created.`);
+  }
+
+function openEntry(entry, opts={}){
+    startMenu.hide();
+    taskbar.hidePanels();
+
+    // Restore minimized window
+    if(opts?.restoreWinId){
+      wm.restore(opts.restoreWinId);
+      return;
+    }
+
+    // Folder launcher
+    if(entry.kind==='folder'){
+      return openFolder(entry.id);
+    }
+
+    // App
+    if(entry.kind==='app'){
+      const existingWinId = wm.findTopByAppId(entry.id);
+      if(existingWinId){
+        wm.restore(existingWinId);
+        return;
+      }
+
+      const appMeta = registry.apps[entry.id];
+      if(!appMeta?.module){
+        return toast('Not available', 'This app is not installed.');
+      }
+      const mod = await import(appMeta.module);
+      const { mount } = mod;
+      const node = document.createElement('div');
+      node.dataset.app = entry.id;
+      const winId = wm.createWindow({
+        appId: entry.id,
+        title: appMeta.title,
+        icon: appMeta.icon,
+        contentNode: node,
+        params: entry.params || {}
+      });
+      await mount(node, { shell: shellAPI, winId, params: entry.params || {} });
+      return;
+    }
+
+    // File shortcut or note file
+    if(entry.kind==='file'){
+      // open by file type
+      if(entry.fileType==='shortcut'){
+        return openPortal(entry.url, entry.title);
+      }
+      if(entry.fileType==='note'){
+        return openEntry({kind:'app', id:'notes', params:{ fileId: entry.id }});
+      }
+      return toast('Unsupported', 'This file type cannot be opened yet.');
+    }
+  }
+
+  async function openFolder(folderId){
+    const f = registry.folders[folderId];
+    if(!f) return;
+    // Folder opens as a lightweight window listing children
+    const node = document.createElement('div');
+    const winId = wm.createWindow({ appId: 'folder:'+folderId, title: f.title, icon: f.icon, contentNode: node, params:{ folderId } });
+
+    node.append(el('div',{class:'section-title', text:'Items'}));
+    const list = el('div',{class:'list'});
+    node.append(list);
+    for(const child of f.children){
+      if(child.type==='portal'){
+        const cell=el('div',{class:'cell'});
+        cell.append(
+          el('div',{class:'left'},[el('img',{src:child.icon,alt:''}), el('div',{class:'name',text:child.title})]),
+          el('div',{class:'meta',text:'New tab'})
+        );
+        cell.addEventListener('click', ()=>openPortal(child.url, child.title));
+        list.append(cell);
+      } else if(child.type==='appref'){
+        const app = registry.apps[child.ref];
+        const cell=el('div',{class:'cell'});
+        cell.append(
+          el('div',{class:'left'},[el('img',{src:app.icon,alt:''}), el('div',{class:'name',text:app.title})]),
+          el('div',{class:'meta',text:'App'})
+        );
+        cell.addEventListener('click', ()=>openEntry({kind:'app', id: child.ref}));
+        list.append(cell);
+      }
+    }
+  }
+
+  // Initial hint
+  const dev=getDeviceInfo();
+  await toast('Welcome', dev.mode==='card' ? 'iPhone card mode enabled.' : 'Floating windows enabled.');
+}
