@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="description" content="YamanOS — a browser-based mobile OS simulation with touch interaction, apps, and responsive layout." />
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="icon" href="./favicon.ico" />
+  <title>YamanOS v1.0.0</title>
+  <link rel="stylesheet" href="./css/main.css?v=v1.0.0&cb=20260210-icn5" />
+  <link rel="stylesheet" href="./os/ui/bubbly.css?cb=20260210-icn5" />
+  <link rel="stylesheet" href="./css/memory.css?cb=20260210-icn5" />
+</head>
+
+<body>
+  <div id="boot" class="boot-screen" aria-live="polite">
+    <div class="boot-glow">
+      <div class="boot-text">Booting YamanOS...</div>
+      <div class="boot-subtext">YamanOS</div>
+    </div>
+  </div>
+
+  <div id="app" class="app" hidden>
+    <div id="app-shell"></div>
+  </div>
+  <div id="app-windows"></div>
+
+  <!-- Global error handler to display any module or runtime errors directly on the page -->
+  <script>
+    const DEBUG = localStorage.getItem('yamanos_debug') === '1';
+    if (DEBUG) {
+      window.addEventListener('error', function (event) {
+        const msg = event.message || 'Unknown error';
+        const src = event.filename || '';
+        const line = event.lineno || 0;
+        const col = event.colno || 0;
+        const err = event.error && event.error.stack ? event.error.stack : '';
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.background = 'rgba(0,0,0,0.85)';
+        overlay.style.color = 'red';
+        overlay.style.padding = '20px';
+        overlay.style.fontFamily = 'monospace';
+        overlay.style.zIndex = '99999';
+        overlay.style.overflow = 'auto';
+        overlay.innerHTML = '<h2>Uncaught Error</h2>' +
+          '<p><strong>' + msg.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</strong></p>' +
+          '<p>Source: ' + src + ' (' + line + ':' + col + ')</p>' +
+          '<pre>' + String(err).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+        document.body.appendChild(overlay);
+      });
+
+      // Catch unhandled promise rejections, which can occur when modules fail to load
+      window.addEventListener('unhandledrejection', function (event) {
+        const reason = event.reason || {};
+        const msg = reason.message || String(reason);
+        const err = reason.stack || '';
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.background = 'rgba(0,0,0,0.85)';
+        overlay.style.color = 'red';
+        overlay.style.padding = '20px';
+        overlay.style.fontFamily = 'monospace';
+        overlay.style.zIndex = '99999';
+        overlay.style.overflow = 'auto';
+        overlay.innerHTML = '<h2>Unhandled Rejection</h2>' +
+          '<p><strong>' + msg.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</strong></p>' +
+          '<pre>' + String(err).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+        document.body.appendChild(overlay);
+      });
+    }
+  </script>
+
+  <!-- Boot Failure Detector: If boot.js doesn't load within 3s, show error -->
+  <script>
+    setTimeout(function () {
+      // If boot hasn't started, __YAMANOS_BOOTED__ will still be undefined
+      if (!window.__YAMANOS_BOOTED__) {
+        const bootScreen = document.getElementById('boot');
+        if (bootScreen) {
+          const errDiv = document.createElement('div');
+          errDiv.style.cssText = 'position:absolute;bottom:60px;width:100%;text-align:center;color:#ff4444;font-size:13px;padding:0 20px;';
+          errDiv.innerHTML = '<strong>Boot Failed</strong><br>Module loading error.<br>Check browser console (Safari > Develop > iPhone)';
+          bootScreen.appendChild(errDiv);
+        }
+        console.error('[BOOT TIMEOUT] boot.js did not execute within 3s');
+        console.error('[BOOT TIMEOUT] Check:');
+        console.error('1. ES module support (iOS Safari 15+)');
+        console.error('2. File paths are correct');
+        console.error('3. Network/CORS errors');
+        console.error('4. JavaScript errors in imports');
+      }
+    }, 10000);
+  </script>
+
+  <script type="module">
+    (async () => {
+      const bootSources = [
+        './os/boot.js?v=v1.0.0&cb=20260210-icn5',
+        './boot.js?v=v1.0.0&cb=20260210-icn5',
+      ];
+
+      let lastError = null;
+      for (const src of bootSources) {
+        try {
+          await import(src);
+          return;
+        } catch (e) {
+          lastError = e;
+          console.warn(`[BOOT LOADER] Failed to import ${src}`, e);
+        }
+      }
+
+      const bootScreen = document.getElementById('boot');
+      if (bootScreen) {
+        const errDiv = document.createElement('div');
+        errDiv.style.cssText = 'position:absolute;bottom:60px;width:100%;text-align:center;color:#ff6666;font-size:13px;padding:0 20px;';
+        errDiv.innerHTML = '<strong>Boot Module Missing</strong><br>Deployment file structure is invalid.<br>Expected /os/boot.js in repository root build.';
+        bootScreen.appendChild(errDiv);
+      }
+      console.error('[BOOT LOADER] Could not import boot module from any known path', lastError);
+    })();
+  </script>
+</body>
+
+</html>
