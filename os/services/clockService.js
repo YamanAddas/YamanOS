@@ -1,10 +1,12 @@
 const CLOCK_STATE_KEY = "yamanosClockState";
 const CLOCK_V2_STATE_KEY = "yamanos_clock_v2";
+const CLOCK_V3_STATE_KEY = "yamanos_clock_v3";
 
 export class ClockService {
   constructor() {
     this.stateKey = CLOCK_STATE_KEY;
     this.v2StateKey = CLOCK_V2_STATE_KEY;
+    this.v3StateKey = CLOCK_V3_STATE_KEY;
     this.started = false;
     this.audioCtx = null;
     this.audioUnlocked = false;
@@ -218,13 +220,21 @@ export class ClockService {
   }
 
   getV2State() {
-    const parsed = this.readJson(this.v2StateKey);
-    if (!parsed || typeof parsed !== "object") return null;
-    return this.normalizeV2State(parsed);
+    const parsedV3 = this.readJson(this.v3StateKey);
+    if (parsedV3 && typeof parsedV3 === "object") {
+      return this.normalizeV2State(parsedV3);
+    }
+
+    const parsedV2 = this.readJson(this.v2StateKey);
+    if (!parsedV2 || typeof parsedV2 !== "object") return null;
+    const normalized = this.normalizeV2State(parsedV2);
+    this.writeJson(this.v3StateKey, normalized);
+    return normalized;
   }
 
   saveV2State(state) {
     const normalized = this.normalizeV2State(state);
+    this.writeJson(this.v3StateKey, normalized);
     this.writeJson(this.v2StateKey, normalized);
   }
 
