@@ -21,6 +21,7 @@ export class ClockApp extends App {
         this.cityDb = this.buildCityDb();
         this.lastStopwatchSave = 0;
         this.lastTimerSave = 0;
+        this.dayShort = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
         // Skin Switcher State
         this.skinOrder = ['digital', 'analog', 'swiss', 'classic'];
@@ -794,7 +795,7 @@ export class ClockApp extends App {
     /* ---------- Stopwatch ---------- */
     renderStopwatch() {
         this.content.innerHTML = '';
-        const elapsed = this.state.stopwatch.elapsed;
+        const elapsed = this.getStopwatchElapsed();
 
         const display = el('div', { class: 'clock-display-large' }, this.formatDuration(elapsed));
 
@@ -802,8 +803,15 @@ export class ClockApp extends App {
         const startBtn = el('button', {
             class: `clock-circle-btn ${this.state.stopwatch.running ? 'stop' : 'start'}`,
             onclick: () => {
-                this.state.stopwatch.running = !this.state.stopwatch.running;
-                if (this.state.stopwatch.running) this.state.stopwatch.lastStart = Date.now();
+                const now = Date.now();
+                if (this.state.stopwatch.running) {
+                    this.syncStopwatchElapsed(now);
+                    this.state.stopwatch.running = false;
+                    this.state.stopwatch.lastStart = null;
+                } else {
+                    this.state.stopwatch.running = true;
+                    this.state.stopwatch.lastStart = now;
+                }
                 this.saveState();
                 this.renderStopwatch();
             }
@@ -813,7 +821,9 @@ export class ClockApp extends App {
             class: 'clock-circle-btn secondary',
             onclick: () => {
                 if (this.state.stopwatch.running) {
-                    this.state.stopwatch.laps.push(this.state.stopwatch.elapsed);
+                    const now = Date.now();
+                    const elapsedNow = this.syncStopwatchElapsed(now);
+                    this.state.stopwatch.laps.push(elapsedNow);
                     this.saveState();
                     this.renderStopwatch();
                 } else {
@@ -840,21 +850,39 @@ export class ClockApp extends App {
         this.content.append(display, controls, lapsList);
     }
 
+    updateStopwatch(nowDate = new Date()) {
+        if (!this.state.stopwatch.running) return;
+        const nowMs = nowDate.getTime();
+        const elapsed = this.syncStopwatchElapsed(nowMs);
+        const display = this.content.querySelector('.clock-display-large');
+        if (display) display.textContent = this.formatDuration(elapsed);
+        if (!this.lastStopwatchSave || nowMs - this.lastStopwatchSave > 5000) {
+            this.lastStopwatchSave = nowMs;
+            this.saveState();
+        }
+    }
+
     /* ---------- Timer ---------- */
     renderTimer() {
         this.content.innerHTML = '';
-        const remaining = this.state.timer.remaining;
+        const remaining = this.syncTimerRemaining();
 
         // Progress Ring (Visual Only for now, could be canvas)
-        const display = el('div', { class: 'clock-display-large' }, this.formatDuration(remaining * 1000));
+        const display = el('div', { class: 'clock-display-large clock-timer-display' }, this.formatDuration(remaining * 1000));
 
         // Controls
         const startBtn = el('button', {
             class: `clock-circle-btn ${this.state.timer.running ? 'stop' : 'start'}`,
             onclick: () => {
-                this.state.timer.running = !this.state.timer.running;
+                const now = Date.now();
                 if (this.state.timer.running) {
-                    this.state.timer.endsAt = Date.now() + this.state.timer.remaining * 1000;
+                    this.syncTimerRemaining(now);
+                    this.state.timer.running = false;
+                    this.state.timer.endsAt = null;
+                } else {
+                    if (this.state.timer.remaining <= 0) this.state.timer.remaining = this.state.timer.duration;
+                    this.state.timer.running = true;
+                    this.state.timer.endsAt = now + this.state.timer.remaining * 1000;
                 }
                 this.saveState();
                 this.renderTimer();
@@ -866,6 +894,7 @@ export class ClockApp extends App {
             onclick: () => {
                 this.state.timer.remaining = this.state.timer.duration;
                 this.state.timer.running = false;
+                this.state.timer.endsAt = null;
                 this.saveState();
                 this.renderTimer();
             }
@@ -881,6 +910,7 @@ export class ClockApp extends App {
                     this.state.timer.duration = m * 60;
                     this.state.timer.remaining = m * 60;
                     this.state.timer.running = false;
+                    this.state.timer.endsAt = null;
                     this.saveState();
                     this.renderTimer();
                 }
@@ -891,9 +921,9 @@ export class ClockApp extends App {
     }
 
     updateTimer(nowDate = new Date()) {
-        if (!this.state.timer.running || this.state.timer.remaining <= 0) return;
         const nowMs = nowDate.getTime();
-        this.state.timer.remaining = Math.max(0, Math.round((this.state.timer.endsAt - nowMs) / 1000));
+        if (!this.state.timer.running) return;
+        this.syncTimerRemaining(nowMs);
         if (!this.lastTimerSave || nowMs - this.lastTimerSave > 5000) {
             this.lastTimerSave = nowMs;
             this.saveState();
@@ -902,6 +932,7 @@ export class ClockApp extends App {
         if (display) display.textContent = this.formatDuration(this.state.timer.remaining * 1000);
         if (this.state.timer.remaining <= 0) {
             this.state.timer.running = false;
+            this.state.timer.endsAt = null;
             this.saveState();
             alert('Timer Complete!');
         }
@@ -1251,6 +1282,38 @@ export class ClockApp extends App {
         const mins = Math.floor((totalSec % 3600) / 60);
         const secs = totalSec % 60;
         return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    getStopwatchElapsed(nowMs = Date.now()) {
+        const stopwatch = this.state.stopwatch || {};
+        const base = Number.isFinite(stopwatch.elapsed) ? Math.max(0, stopwatch.elapsed) : 0;
+        if (!stopwatch.running || !Number.isFinite(stopwatch.lastStart)) return base;
+        return base + Math.max(0, nowMs - stopwatch.lastStart);
+    }
+
+    syncStopwatchElapsed(nowMs = Date.now()) {
+        const elapsed = this.getStopwatchElapsed(nowMs);
+        this.state.stopwatch.elapsed = elapsed;
+        if (this.state.stopwatch.running) this.state.stopwatch.lastStart = nowMs;
+        return elapsed;
+    }
+
+    getTimerRemainingSeconds(nowMs = Date.now()) {
+        const timer = this.state.timer || {};
+        const remaining = Number.isFinite(timer.remaining) ? Math.max(0, timer.remaining) : 0;
+        if (!timer.running) return remaining;
+        if (!Number.isFinite(timer.endsAt)) return remaining;
+        return Math.max(0, Math.round((timer.endsAt - nowMs) / 1000));
+    }
+
+    syncTimerRemaining(nowMs = Date.now()) {
+        if (!this.state.timer.running) return this.getTimerRemainingSeconds(nowMs);
+        if (!Number.isFinite(this.state.timer.endsAt)) {
+            this.state.timer.endsAt = nowMs + Math.max(0, this.state.timer.remaining) * 1000;
+        }
+        const remaining = this.getTimerRemainingSeconds(nowMs);
+        this.state.timer.remaining = remaining;
+        return remaining;
     }
 
 
