@@ -20,15 +20,6 @@ export class Dock {
     this.root.style.touchAction = 'none';
     this.root.style.userSelect = 'none';
     this.root.style.webkitUserSelect = 'none';
-    // Prevent iOS WebKit from intercepting touch events on the dock
-    this.root.addEventListener('touchstart', (e) => {
-      const t = e.target;
-      if (t?.tagName === 'INPUT' || t?.tagName === 'TEXTAREA') return;
-      if (e.cancelable) e.preventDefault();
-    }, { passive: false });
-    this.root.addEventListener('touchmove', (e) => {
-      if (e.cancelable) e.preventDefault();
-    }, { passive: false });
     this.items = [];
     this.allItems = [];
     this.eventTarget = window;
