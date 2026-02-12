@@ -4,69 +4,54 @@ export class HomeBar {
     constructor(onHome) {
         this.onHome = onHome;
         this.root = null;
+        this.enabled = this._isStandaloneWebApp();
     }
 
     render() {
         this.root = el('div', { class: 'home-bar-container' });
+        this.root.classList.add(this.enabled ? 'is-enabled' : 'is-disabled');
+        this.root.setAttribute('aria-hidden', this.enabled ? 'false' : 'true');
 
-        // CSS (Inline for now)
-        Object.assign(this.root.style, {
-            position: 'fixed',
-            bottom: '0',
-            left: '0',
-            right: '0',
-            height: '24px', // Touch area
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'flex-end',
-            paddingBottom: '8px',
-            zIndex: '10000',
-            cursor: 'pointer',
-            // mixBlendMode: 'difference' // Make it visible on white/black
+        const hit = el('button', {
+            class: 'home-bar-hit',
+            type: 'button',
+            'aria-label': 'Go Home',
         });
+        const bar = el('span', { class: 'home-bar-pill' });
+        hit.appendChild(bar);
+        this.root.appendChild(hit);
 
-        const bar = el('div', { class: 'home-bar-pill' });
-        Object.assign(bar.style, {
-            width: '120px',
-            height: '5px',
-            borderRadius: '10px',
-            background: '#ffffff',
-            boxShadow: '0 1px 2px rgba(0,0,0,0.3)',
-            opacity: '0.8',
-            transition: 'opacity 0.2s, transform 0.2s'
-        });
+        if (!this.enabled) return this.root;
 
-        this.root.appendChild(bar);
-
-        // Interactions
-        this.root.onmouseenter = () => {
-            bar.style.opacity = '1';
-            bar.style.transform = 'scale(1.05)';
-        };
-        this.root.onmouseleave = () => {
-            bar.style.opacity = '0.8';
-            bar.style.transform = 'scale(1)';
-        };
-
-        // Click to go Home
-        this.root.onclick = (e) => {
-            e.stopPropagation();
-            if (this.onHome) this.onHome();
-        };
-
-        // Simple Swipe Up Logic
+        // Tap and short upward swipe share the same home action.
         let startY = 0;
-        this.root.addEventListener('touchstart', (e) => {
-            startY = e.touches[0].clientY;
+        hit.addEventListener('pointerdown', (e) => {
+            startY = e.clientY;
         }, { passive: true });
 
-        this.root.addEventListener('touchend', (e) => {
-            const diff = startY - e.changedTouches[0].clientY;
-            if (diff > 10) { // Slight swipe up
+        hit.addEventListener('pointerup', (e) => {
+            const diff = startY - e.clientY;
+            if (diff > 8 || Math.abs(diff) <= 8) {
                 if (this.onHome) this.onHome();
             }
         }, { passive: true });
 
         return this.root;
+    }
+
+    isEnabled() {
+        return this.enabled;
+    }
+
+    _isStandaloneWebApp() {
+        try {
+            if (window.matchMedia?.('(display-mode: standalone)').matches) return true;
+            if (window.matchMedia?.('(display-mode: fullscreen)').matches) return true;
+            if (window.matchMedia?.('(display-mode: minimal-ui)').matches) return true;
+            if (typeof navigator.standalone === 'boolean' && navigator.standalone) return true;
+        } catch (e) {
+            // Best-effort detection only.
+        }
+        return false;
     }
 }
