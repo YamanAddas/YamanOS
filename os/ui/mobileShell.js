@@ -53,7 +53,10 @@ export class MobileShell {
     console.log(`[MobileShell] Initializing ${VERSION}...`);
     document.body.classList.add('is-mobile');
     document.body.classList.toggle('is-landscape', this.state.isLandscape);
+    document.body.classList.toggle('is-standalone-webapp', this._isStandaloneWebApp());
+    document.body.classList.toggle('reduced-effects', this._shouldReduceEffects());
     document.body.classList.remove('in-app');
+    this._applyViewportHeightVar();
     this.mount();
     this.bindEvents();
 
@@ -565,6 +568,7 @@ export class MobileShell {
     const viewport = window.visualViewport || window;
     const newHeight = viewport.height;
     const isKeyboard = Math.abs(window.innerHeight - newHeight) > 100;
+    this._applyViewportHeightVar();
 
     // NEW: Detect orientation change
     const isLandscape = window.innerWidth > window.innerHeight;
@@ -592,6 +596,37 @@ export class MobileShell {
     this.dom.spacer.style.height = isKeyboard
       ? `${window.innerHeight - newHeight}px`
       : '0px';
+  }
+
+  _applyViewportHeightVar() {
+    const viewport = window.visualViewport || window;
+    const vh = Math.max(0, Number(viewport?.height || window.innerHeight || 0) * 0.01);
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+
+  _isStandaloneWebApp() {
+    try {
+      if (window.matchMedia?.('(display-mode: standalone)').matches) return true;
+      if (window.matchMedia?.('(display-mode: fullscreen)').matches) return true;
+      if (window.matchMedia?.('(display-mode: minimal-ui)').matches) return true;
+      if (typeof navigator.standalone === 'boolean' && navigator.standalone) return true;
+    } catch (e) {
+      // No-op; fall back to browser mode.
+    }
+    return false;
+  }
+
+  _shouldReduceEffects() {
+    try {
+      if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return true;
+      const cores = Number(navigator.hardwareConcurrency || 0);
+      const memory = Number(navigator.deviceMemory || 0);
+      if (cores > 0 && cores <= 4) return true;
+      if (memory > 0 && memory <= 4) return true;
+    } catch (e) {
+      // Ignore and keep full effects.
+    }
+    return false;
   }
 
   // ─── Alarm Overlay ──────────────────────────────────────────
