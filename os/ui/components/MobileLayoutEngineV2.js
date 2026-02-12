@@ -22,8 +22,8 @@ export class MobileLayoutEngine {
             dotsHeight: 22,
             sideMargin: 12,
             minGridHeight: 200,
-            phoneTopInsetFloor: 47,
-            landscapeSideInsetFloor: 47,
+            phoneTopInsetFloor: 0,
+            landscapeSideInsetFloor: 0,
             ...config,
         };
     }
@@ -41,11 +41,11 @@ export class MobileLayoutEngine {
             right: Math.max(0, toPx(safeInsets.right)),
         };
 
-        if (width <= 600) {
+        if (width <= 600 && this.config.phoneTopInsetFloor > 0) {
             insets.top = Math.max(insets.top, this.config.phoneTopInsetFloor);
         }
 
-        if (width > height && width <= 950) {
+        if (width > height && width <= 950 && this.config.landscapeSideInsetFloor > 0) {
             insets.left = Math.max(insets.left, this.config.landscapeSideInsetFloor);
             insets.right = Math.max(insets.right, this.config.landscapeSideInsetFloor);
         }
