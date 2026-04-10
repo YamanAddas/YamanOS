@@ -610,26 +610,42 @@ export class SettingsApp extends App {
       { css: 'url("assets/wallpapers/pink.png")', name: 'Pink' },
       { css: 'url("assets/wallpapers/sky.png")', name: 'Sky' },
       { css: 'url("assets/wallpapers/mint.png")', name: 'Mint' },
+      { css: 'cosmic', name: 'Cosmic', special: true },
+      { css: 'starfield', name: 'Starfield', special: true },
     ];
 
     const currentWallpaper = localStorage.getItem(WALLPAPER_KEY) || wallpapers[0].css;
 
     const grid = el('div', { class: 'ys-wallpaper-grid' });
     wallpapers.forEach((wp) => {
+      let bgStyle = `background:${wp.css}; background-size:cover; background-position:center;`;
+      if (wp.css === 'cosmic') bgStyle = 'background:linear-gradient(135deg, #060b14 0%, #0a1628 50%, #060b14 100%); opacity:0.7;';
+      if (wp.css === 'starfield') bgStyle = 'background:radial-gradient(circle at 50% 50%, #0d1b2e 0%, #060b14 100%);';
       const option = el('button', {
         type: 'button',
         class: 'ys-wallpaper' + (wp.css === currentWallpaper ? ' selected' : ''),
-        style: `background:${wp.css}; background-size:cover; background-position:center;`,
+        style: bgStyle,
       }, [el('div', { class: 'ys-wallpaper-label' }, wp.name)]);
 
       option.onclick = () => {
         const shell = document.getElementById('app-shell') || document.body;
-        shell.style.background = wp.css;
-        shell.style.backgroundSize = 'cover';
-        shell.style.backgroundPosition = 'center';
+        shell.classList.remove('cosmic-wallpaper');
+
+        if (wp.css === 'cosmic') {
+          // Cosmic: keep current wallpaper but fade it to show starfield
+          shell.classList.add('cosmic-wallpaper');
+        } else if (wp.css === 'starfield') {
+          // Starfield: remove wallpaper entirely, show pure starfield
+          shell.style.background = 'transparent';
+          shell.style.backgroundSize = '';
+          shell.style.backgroundPosition = '';
+        } else {
+          shell.style.background = wp.css;
+          shell.style.backgroundSize = 'cover';
+          shell.style.backgroundPosition = 'center';
+        }
         localStorage.setItem(WALLPAPER_KEY, wp.css);
 
-        // Visual selection state
         grid.querySelectorAll('.ys-wallpaper.selected').forEach((el) => el.classList.remove('selected'));
         option.classList.add('selected');
       };

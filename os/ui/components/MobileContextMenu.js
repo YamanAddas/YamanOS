@@ -48,7 +48,20 @@ export class MobileContextMenu {
   }
 
   applySavedWallpaper(saved) {
-    const shell = document.querySelector('.mobile-shell') || document.body;
+    const shell = document.getElementById('app-shell') || document.querySelector('.mobile-shell') || document.body;
+    shell.classList.remove('cosmic-wallpaper');
+
+    if (saved === 'cosmic') {
+      shell.classList.add('cosmic-wallpaper');
+      return;
+    }
+    if (saved === 'starfield') {
+      shell.style.background = 'transparent';
+      shell.style.backgroundSize = '';
+      shell.style.backgroundPosition = '';
+      return;
+    }
+
     const normalized = this.normalizeWallpaper(saved);
     shell.style.background = '';
     shell.style.backgroundImage = `url("${normalized}")`;

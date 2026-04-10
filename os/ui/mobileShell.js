@@ -213,7 +213,23 @@ export class MobileShell {
     // App lifecycle
     kernel.on('process:started', ({ pid, app }) => {
       this.dom.appLayer.innerHTML = '';
-      this.dom.appLayer.appendChild(app.root);
+
+      // Glass chrome wrapper with unified header
+      const appName = app.metadata?.name || 'App';
+      const chrome = el('div', { class: 'glass-chrome' });
+      const header = el('div', { class: 'glass-chrome-header' }, [
+        el('div', { class: 'glass-chrome-title' }, appName),
+        el('button', {
+          class: 'glass-chrome-close',
+          type: 'button',
+          'aria-label': 'Close',
+          onclick: () => app.close(),
+        }, '✕'),
+      ]);
+      chrome.appendChild(header);
+      chrome.appendChild(app.root);
+      this.dom.appLayer.appendChild(chrome);
+
       this.state.activePid = pid;
       this.setMode('app');
     });

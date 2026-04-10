@@ -129,7 +129,7 @@ body.theme-light {
   pointer-events: auto;
 }
 
-/* Shell container - can be cleared/rebuilt */
+/* Shell container - sits above starfield canvas */
 #app-shell {
   position: relative;
   width: 100%;
@@ -140,6 +140,11 @@ body.theme-light {
   background-position: center center;
   background-size: cover;
   background-attachment: fixed;
+}
+
+/* Cosmic mode: wallpaper fades to reveal starfield canvas beneath */
+#app-shell.cosmic-wallpaper {
+  opacity: 0.55;
 }
 
 /* ── Placeholder window chrome ── */
@@ -3369,9 +3374,6 @@ body.is-mobile [contenteditable="true"] {
 .m-search-container {
   transition: opacity 0.3s ease;
   z-index: 50;
-  /* Lower than app layer */
-  position: absolute !important;
-  top: 55px !important;
 }
 
 /* Snake Specific Fixes */
@@ -6359,44 +6361,6 @@ body.is-mobile .m-grid-container {
   opacity: 1;
   transform: scale(1);
 }
-/* --- Search Bar Layout Enforcement --- */
-.m-search-container {
-  position: absolute;
-  /* Dynamic top based on safe area */
-  top: calc(env(safe-area-inset-top, 0px) + 12px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 600px;
-  height: 50px;
-  z-index: 100;
-  pointer-events: none; /* Container passes clicks */
-}
-
-/* Ensure input is interactive and styled */
-.m-search-input {
-  width: 100%;
-  height: 100%;
-  pointer-events: auto;
-  border-radius: 25px;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-surface-2);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  padding: 0 20px;
-  color: var(--text-primary);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  font-size: 16px;
-  transition: all 0.2s ease;
-}
-
-.m-search-input:focus {
-  outline: none;
-  background: var(--glass-surface-3);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  border-color: rgba(255,255,255,0.3);
-}
-
 /* --- Layout Stabilization v1.0.0 --- */
 :root {
   --yamanos-status-bar-height: 44px;
