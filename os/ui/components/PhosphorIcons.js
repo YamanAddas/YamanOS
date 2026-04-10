@@ -1,108 +1,309 @@
 /**
- * PhosphorIcons.js — YancoVerse-styled Phosphor Duotone Icons
+ * AppIcons.js — Rich Colored Animated SVG Icons
  *
- * Phosphor Icons (MIT) with teal gradient fills and glow effects
- * matching the YancoHub/YancoVerse cosmic glass design language.
- *
- * Each icon uses:
- *   - linearGradient stroke from #33ffdd → #00e5c1 → #00b89c
- *   - Duotone fill layer at 0.15 opacity for glassmorphic depth
- *   - Gaussian blur glow filter for sci-fi HUD feel
+ * Each icon has its own unique color palette, layered gradients,
+ * depth effects, and CSS-driven animations. Designed to feel premium
+ * and alive inside hexagonal containers on cosmic dark backgrounds.
  */
-
-const DEFS = `
-<defs>
-  <linearGradient id="ph-grad" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#33ffdd"/>
-    <stop offset="0.5" stop-color="#00e5c1"/>
-    <stop offset="1" stop-color="#00b89c"/>
-  </linearGradient>
-  <linearGradient id="ph-fill" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#33ffdd"/>
-    <stop offset="1" stop-color="#00e5c1"/>
-  </linearGradient>
-  <filter id="ph-glow">
-    <feGaussianBlur stdDeviation="3" result="blur"/>
-    <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-  </filter>
-</defs>`;
-
-/**
- * Wraps raw Phosphor SVG paths with YancoVerse gradient styling.
- * The duotone layer (opacity path) gets a teal fill at low opacity.
- * The main path gets a teal gradient fill.
- */
-function styled(duotonePath, mainPath, viewBox = '0 0 256 256') {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" fill="none" filter="url(#ph-glow)">
-${DEFS}
-<path d="${duotonePath}" fill="url(#ph-fill)" opacity="0.15"/>
-<path d="${mainPath}" fill="url(#ph-grad)"/>
-</svg>`;
-}
 
 export const PHOSPHOR_ICONS = {
 
-  calculator: styled(
-    // duotone fill
-    'M176,64v48H80V64Z',
-    // main outline
-    'M80,120h96a8,8,0,0,0,8-8V64a8,8,0,0,0-8-8H80a8,8,0,0,0-8,8v48A8,8,0,0,0,80,120Zm8-48h80v32H88ZM200,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V40A16,16,0,0,0,200,24Zm0,192H56V40H200ZM100,148a12,12,0,1,1-12-12A12,12,0,0,1,100,148Zm40,0a12,12,0,1,1-12-12A12,12,0,0,1,140,148Zm40,0a12,12,0,1,1-12-12A12,12,0,0,1,180,148Zm-80,40a12,12,0,1,1-12-12A12,12,0,0,1,100,188Zm40,0a12,12,0,1,1-12-12A12,12,0,0,1,140,188Zm40,0a12,12,0,1,1-12-12A12,12,0,0,1,180,188Z'
-  ),
+  /* ── Calculator: dark slate + orange accents ── */
+  calculator: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="calc-bg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3a3f47"/><stop offset="1" stop-color="#1a1d22"/>
+      </linearGradient>
+      <linearGradient id="calc-display" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2a3038"/><stop offset="1" stop-color="#1c2026"/>
+      </linearGradient>
+      <linearGradient id="calc-orange" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ff9f43"/><stop offset="1" stop-color="#ee5a24"/>
+      </linearGradient>
+    </defs>
+    <rect x="10" y="6" width="44" height="52" rx="8" fill="url(#calc-bg)" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+    <rect x="14" y="10" width="36" height="14" rx="4" fill="url(#calc-display)"/>
+    <text x="46" y="21" fill="#e0e6ed" font-family="sans-serif" font-size="10" text-anchor="end" font-weight="600">247</text>
+    <!-- button grid -->
+    <rect x="14" y="28" width="7" height="6" rx="1.5" fill="#4a5058" opacity="0.9"/>
+    <rect x="23" y="28" width="7" height="6" rx="1.5" fill="#4a5058" opacity="0.9"/>
+    <rect x="32" y="28" width="7" height="6" rx="1.5" fill="#4a5058" opacity="0.9"/>
+    <rect x="41" y="28" width="9" height="6" rx="1.5" fill="url(#calc-orange)"/>
+    <rect x="14" y="36" width="7" height="6" rx="1.5" fill="#5a6068"/>
+    <rect x="23" y="36" width="7" height="6" rx="1.5" fill="#5a6068"/>
+    <rect x="32" y="36" width="7" height="6" rx="1.5" fill="#5a6068"/>
+    <rect x="41" y="36" width="9" height="6" rx="1.5" fill="url(#calc-orange)"/>
+    <rect x="14" y="44" width="7" height="6" rx="1.5" fill="#5a6068"/>
+    <rect x="23" y="44" width="7" height="6" rx="1.5" fill="#5a6068"/>
+    <rect x="32" y="44" width="7" height="6" rx="1.5" fill="#5a6068"/>
+    <rect x="41" y="44" width="9" height="6" rx="1.5" fill="url(#calc-orange)"/>
+    <!-- shine -->
+    <rect x="10" y="6" width="44" height="52" rx="8" fill="url(#calc-bg)" opacity="0" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+    <path d="M14 8 C24 6, 36 6, 50 8" stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none" stroke-linecap="round"/>
+  </svg>`,
 
-  browser: styled(
-    // globe duotone
-    'M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z',
-    // globe outline
-    'M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm88,104a87.61,87.61,0,0,1-3.33,24H174.16a157.44,157.44,0,0,0,0-48h38.51A87.61,87.61,0,0,1,216,128ZM102,168H154a115.11,115.11,0,0,1-26,45A115.27,115.27,0,0,1,102,168Zm-3.9-16a140.84,140.84,0,0,1,0-48h59.88a140.84,140.84,0,0,1,0,48ZM40,128a87.61,87.61,0,0,1,3.33-24H81.84a157.44,157.44,0,0,0,0,48H43.33A87.61,87.61,0,0,1,40,128ZM154,88H102a115.11,115.11,0,0,1,26-45A115.27,115.27,0,0,1,154,88Zm52.33,0H170.71a135.28,135.28,0,0,0-22.3-45.6A88.29,88.29,0,0,1,206.37,88ZM107.59,42.4A135.28,135.28,0,0,0,85.29,88H49.63A88.29,88.29,0,0,1,107.59,42.4ZM49.63,168H85.29a135.28,135.28,0,0,0,22.3,45.6A88.29,88.29,0,0,1,49.63,168Zm98.78,45.6a135.28,135.28,0,0,0,22.3-45.6h35.66A88.29,88.29,0,0,1,148.41,213.6Z'
-  ),
+  /* ── Browser: vivid blue globe with green land, rotating ring ── */
+  browser: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="globe-sea" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#4facfe"/><stop offset="1" stop-color="#0072ff"/>
+      </linearGradient>
+      <linearGradient id="globe-land" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#56ab2f"/><stop offset="1" stop-color="#2e8b57"/>
+      </linearGradient>
+      <radialGradient id="globe-shine" cx="0.35" cy="0.3" r="0.5">
+        <stop offset="0" stop-color="rgba(255,255,255,0.45)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/>
+      </radialGradient>
+      <clipPath id="globe-clip"><circle cx="32" cy="32" r="22"/></clipPath>
+    </defs>
+    <!-- ocean -->
+    <circle cx="32" cy="32" r="22" fill="url(#globe-sea)"/>
+    <!-- landmasses -->
+    <g clip-path="url(#globe-clip)">
+      <ellipse cx="28" cy="22" rx="10" ry="8" fill="url(#globe-land)" opacity="0.85" transform="rotate(-15 28 22)"/>
+      <ellipse cx="38" cy="38" rx="8" ry="12" fill="url(#globe-land)" opacity="0.75" transform="rotate(10 38 38)"/>
+      <ellipse cx="18" cy="40" rx="6" ry="4" fill="url(#globe-land)" opacity="0.65"/>
+      <!-- grid lines -->
+      <ellipse cx="32" cy="32" rx="14" ry="22" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.6"/>
+      <ellipse cx="32" cy="32" rx="8" ry="22" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/>
+      <line x1="10" y1="26" x2="54" y2="26" stroke="rgba(255,255,255,0.10)" stroke-width="0.5"/>
+      <line x1="10" y1="38" x2="54" y2="38" stroke="rgba(255,255,255,0.10)" stroke-width="0.5"/>
+    </g>
+    <!-- shine -->
+    <circle cx="32" cy="32" r="22" fill="url(#globe-shine)"/>
+    <!-- ring -->
+    <ellipse cx="32" cy="32" rx="28" ry="10" fill="none" stroke="rgba(100,180,255,0.5)" stroke-width="1.2" transform="rotate(-20 32 32)" class="globe-ring"/>
+    <!-- border -->
+    <circle cx="32" cy="32" r="22" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="0.8"/>
+  </svg>`,
 
-  settings: styled(
-    // gear duotone
-    'M207.86,123.18l16.78-21a99.14,99.14,0,0,0-10.07-24.29l-26.7-3a81,81,0,0,0-6.81-6.81l-3-26.71a99.43,99.43,0,0,0-24.3-10l-21,16.77a81.59,81.59,0,0,0-9.64,0l-21-16.78A99.14,99.14,0,0,0,77.91,41.43l-3,26.7a81,81,0,0,0-6.81,6.81l-26.71,3a99.43,99.43,0,0,0-10,24.3l16.77,21a81.59,81.59,0,0,0,0,9.64l-16.78,21a99.14,99.14,0,0,0,10.07,24.29l26.7,3a81,81,0,0,0,6.81,6.81l3,26.71a99.43,99.43,0,0,0,24.3,10l21-16.77a81.59,81.59,0,0,0,9.64,0l21,16.78a99.14,99.14,0,0,0,24.29-10.07l3-26.7a81,81,0,0,0,6.81-6.81l26.71-3a99.43,99.43,0,0,0,10-24.3l-16.77-21A81.59,81.59,0,0,0,207.86,123.18ZM128,168a40,40,0,1,1,40-40A40,40,0,0,1,128,168Z',
-    // gear outline
-    'M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.6,107.6,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.29,107.29,0,0,0-26.25-10.86,8,8,0,0,0-7.06,1.48L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.6,107.6,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8.06,8.06,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8.06,8.06,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z'
-  ),
+  /* ── Settings: chrome gear with slow spin ── */
+  settings: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="gear-metal" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#c0c8d0"/><stop offset="0.5" stop-color="#8a9aaa"/><stop offset="1" stop-color="#c0c8d0"/>
+      </linearGradient>
+      <radialGradient id="gear-center" cx="0.45" cy="0.4" r="0.5">
+        <stop offset="0" stop-color="#dde4ea"/><stop offset="1" stop-color="#8898a8"/>
+      </radialGradient>
+      <filter id="gear-shadow"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="rgba(0,0,0,0.4)"/></filter>
+    </defs>
+    <g filter="url(#gear-shadow)" class="gear-spin">
+      <!-- gear body -->
+      <path d="M32 8 L36 8 L37 14 C38.5 14.5 40 15.2 41.3 16.1 L46.5 13 L49.5 16 L46.5 21.2
+               C47.4 22.5 48 24 48.5 25.5 L54 26.5 L54 30.5 L48.5 31.5 C48 33 47.4 34.5 46.5 35.8
+               L49.5 41 L46.5 44 L41.3 40.9 C40 41.8 38.5 42.5 37 43 L36 49 L32 49 L31 43
+               C29.5 42.5 28 41.8 26.7 40.9 L21.5 44 L18.5 41 L21.5 35.8 C20.6 34.5 20 33 19.5 31.5
+               L14 30.5 L14 26.5 L19.5 25.5 C20 24 20.6 22.5 21.5 21.2 L18.5 16 L21.5 13 L26.7 16.1
+               C28 15.2 29.5 14.5 31 14 Z"
+            fill="url(#gear-metal)" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+      <!-- center hub -->
+      <circle cx="34" cy="28.5" r="8" fill="url(#gear-center)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+      <circle cx="34" cy="28.5" r="4" fill="none" stroke="rgba(100,120,140,0.5)" stroke-width="1"/>
+      <!-- highlight -->
+      <path d="M22 16 C28 12, 38 12, 46 16" stroke="rgba(255,255,255,0.25)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+    </g>
+  </svg>`,
 
-  weather: styled(
-    // cloud-sun duotone
-    'M139.84,84.41v0a68.22,68.22,0,0,0-41.65,46v-.11a44.08,44.08,0,0,0-38.54,5h0a48,48,0,1,1,80.19-50.94Z',
-    // cloud-sun outline
-    'M164,72a76.2,76.2,0,0,0-20.26,2.73,55.63,55.63,0,0,0-9.41-11.54l9.51-13.57a8,8,0,1,0-13.11-9.18L121.22,54A55.9,55.9,0,0,0,96,48c-.58,0-1.16,0-1.74,0L91.37,31.71a8,8,0,1,0-15.75,2.77L78.5,50.82A56.1,56.1,0,0,0,55.23,65.67L41.61,56.14a8,8,0,1,0-9.17,13.11L46,78.77A55.55,55.55,0,0,0,40,104c0,.57,0,1.15,0,1.72L23.71,108.6a8,8,0,0,0,1.38,15.88,8.24,8.24,0,0,0,1.39-.12l16.32-2.88a55.74,55.74,0,0,0,5.86,12.42A52,52,0,0,0,84,224h80a76,76,0,0,0,0-152ZM56,104a40,40,0,0,1,72.54-23.24,76.26,76.26,0,0,0-35.62,40,52.14,52.14,0,0,0-31,4.17A40,40,0,0,1,56,104ZM164,208H84a36,36,0,1,1,4.78-71.69c-.37,2.37-.63,4.79-.77,7.23a8,8,0,0,0,16,.92,58.91,58.91,0,0,1,1.88-11.81c0-.16.09-.32.12-.48A60.06,60.06,0,1,1,164,208Z'
-  ),
+  /* ── Weather: gradient sky + golden sun + fluffy cloud ── */
+  weather: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="wx-sun" cx="0.4" cy="0.4" r="0.6">
+        <stop offset="0" stop-color="#ffe259"/><stop offset="0.6" stop-color="#ffa751"/><stop offset="1" stop-color="#ff7b00"/>
+      </radialGradient>
+      <radialGradient id="wx-sun-glow" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" stop-color="rgba(255,200,50,0.5)"/><stop offset="1" stop-color="rgba(255,150,0,0)"/>
+      </radialGradient>
+      <linearGradient id="wx-cloud" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d4e4f7"/>
+      </linearGradient>
+      <filter id="wx-cloud-shadow"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,50,100,0.25)"/></filter>
+    </defs>
+    <!-- sun glow -->
+    <circle cx="42" cy="18" r="18" fill="url(#wx-sun-glow)" class="sun-pulse"/>
+    <!-- sun rays -->
+    <g class="sun-spin" style="transform-origin:42px 18px">
+      <line x1="42" y1="4" x2="42" y2="8" stroke="#ffb347" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
+      <line x1="52" y1="8" x2="49.5" y2="11" stroke="#ffb347" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+      <line x1="56" y1="18" x2="52" y2="18" stroke="#ffb347" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
+      <line x1="52" y1="28" x2="49.5" y2="25" stroke="#ffb347" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+      <line x1="32" y1="8" x2="34.5" y2="11" stroke="#ffb347" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+    </g>
+    <!-- sun body -->
+    <circle cx="42" cy="18" r="9" fill="url(#wx-sun)"/>
+    <circle cx="39" cy="15" r="4" fill="rgba(255,255,255,0.25)"/>
+    <!-- cloud -->
+    <g filter="url(#wx-cloud-shadow)" class="cloud-float">
+      <path d="M14 44 C14 44, 8 44, 8 38 C8 33, 13 31, 16 32 C17 27, 22 24, 28 26 C30 22, 36 20, 40 24
+               C44 21, 50 23, 50 28 C54 28, 56 32, 54 36 C56 38, 56 42, 52 44 Z"
+            fill="url(#wx-cloud)"/>
+      <!-- cloud highlight -->
+      <path d="M16 34 C20 30, 30 26, 40 28" stroke="rgba(255,255,255,0.6)" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </g>
+  </svg>`,
 
-  notes: styled(
-    // notepad duotone
-    'M208,40V200a24,24,0,0,1-24,24H72a24,24,0,0,1-24-24V40Z',
-    // notepad outline
-    'M168,128a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,128Zm-8,24H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16ZM216,40V200a32,32,0,0,1-32,32H72a32,32,0,0,1-32-32V40a8,8,0,0,1,8-8H72V24a8,8,0,0,1,16,0v8h32V24a8,8,0,0,1,16,0v8h32V24a8,8,0,0,1,16,0v8h24A8,8,0,0,1,216,40Zm-16,8H184v8a8,8,0,0,1-16,0V48H136v8a8,8,0,0,1-16,0V48H88v8a8,8,0,0,1-16,0V48H56V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16Z'
-  ),
+  /* ── Notes: warm amber notepad with pencil ── */
+  notes: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="note-page" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fef9e7"/><stop offset="1" stop-color="#f5e6b8"/>
+      </linearGradient>
+      <linearGradient id="note-header" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#f39c12"/><stop offset="1" stop-color="#e67e22"/>
+      </linearGradient>
+      <linearGradient id="note-pencil" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#f1c40f"/><stop offset="1" stop-color="#d4a20a"/>
+      </linearGradient>
+      <filter id="note-shadow"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.25)"/></filter>
+    </defs>
+    <!-- shadow page behind -->
+    <rect x="16" y="10" width="34" height="44" rx="4" fill="rgba(200,180,140,0.3)" transform="rotate(3 32 32)"/>
+    <!-- main page -->
+    <g filter="url(#note-shadow)">
+      <rect x="13" y="8" width="34" height="46" rx="4" fill="url(#note-page)"/>
+      <!-- header strip -->
+      <rect x="13" y="8" width="34" height="10" rx="4" fill="url(#note-header)"/>
+      <rect x="13" y="14" width="34" height="4" fill="url(#note-header)"/>
+      <!-- spiral holes -->
+      <circle cx="16" cy="12" r="1.5" fill="#d4a20a" opacity="0.6"/>
+      <circle cx="22" cy="12" r="1.5" fill="#d4a20a" opacity="0.6"/>
+      <circle cx="28" cy="12" r="1.5" fill="#d4a20a" opacity="0.6"/>
+      <circle cx="34" cy="12" r="1.5" fill="#d4a20a" opacity="0.6"/>
+      <circle cx="40" cy="12" r="1.5" fill="#d4a20a" opacity="0.6"/>
+      <!-- text lines -->
+      <line x1="17" y1="24" x2="40" y2="24" stroke="#c4a87c" stroke-width="0.7" opacity="0.6"/>
+      <line x1="17" y1="29" x2="43" y2="29" stroke="#c4a87c" stroke-width="0.7" opacity="0.6"/>
+      <line x1="17" y1="34" x2="38" y2="34" stroke="#c4a87c" stroke-width="0.7" opacity="0.6"/>
+      <line x1="17" y1="39" x2="42" y2="39" stroke="#c4a87c" stroke-width="0.7" opacity="0.6"/>
+      <line x1="17" y1="44" x2="30" y2="44" stroke="#c4a87c" stroke-width="0.7" opacity="0.6"/>
+      <!-- written text suggestion -->
+      <path d="M18 23 C22 22, 26 24, 30 23 C34 22, 37 23, 39 23" stroke="#5a4e3c" stroke-width="0.8" fill="none" opacity="0.5"/>
+      <path d="M18 28 C24 27, 30 29, 36 28 C40 27, 42 28, 43 28" stroke="#5a4e3c" stroke-width="0.8" fill="none" opacity="0.5"/>
+      <path d="M18 33 C22 32, 28 34, 33 33 C36 32, 37 33, 38 33" stroke="#5a4e3c" stroke-width="0.8" fill="none" opacity="0.4"/>
+    </g>
+    <!-- pencil -->
+    <g transform="translate(40,36) rotate(30)">
+      <rect x="0" y="0" width="4" height="20" rx="0.5" fill="url(#note-pencil)"/>
+      <polygon points="0,20 4,20 2,24" fill="#2c3e50"/>
+      <rect x="0" y="0" width="4" height="3" rx="0.5" fill="#e74c3c"/>
+      <rect x="0.5" y="18" width="3" height="2" fill="#d4a20a"/>
+    </g>
+  </svg>`,
 
-  files: styled(
-    // folder duotone
-    'M128,80H32V56a8,8,0,0,1,8-8H92.69a8,8,0,0,1,5.65,2.34Z',
-    // folder outline
-    'M216,72H131.31L104,44.69A15.86,15.86,0,0,0,92.69,40H40A16,16,0,0,0,24,56V200.62A15.4,15.4,0,0,0,39.38,216H216.89A15.13,15.13,0,0,0,232,200.89V88A16,16,0,0,0,216,72ZM92.69,56l16,16H40V56ZM216,200H40V88H216Z'
-  ),
+  /* ── Files: blue folder with paper, 3D perspective ── */
+  files: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="folder-back" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2980b9"/><stop offset="1" stop-color="#1a5276"/>
+      </linearGradient>
+      <linearGradient id="folder-front" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#5dade2"/><stop offset="1" stop-color="#2e86c1"/>
+      </linearGradient>
+      <linearGradient id="folder-tab" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#3498db"/><stop offset="1" stop-color="#2980b9"/>
+      </linearGradient>
+      <filter id="folder-shadow"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.3)"/></filter>
+    </defs>
+    <!-- back panel -->
+    <g filter="url(#folder-shadow)">
+      <rect x="8" y="14" width="48" height="38" rx="4" fill="url(#folder-back)"/>
+      <!-- tab -->
+      <path d="M8 18 L8 14 Q8 10, 12 10 L26 10 Q28 10, 29 12 L32 18 Z" fill="url(#folder-tab)"/>
+      <!-- paper peeking out -->
+      <rect x="14" y="18" width="30" height="26" rx="2" fill="#f0f4f8" opacity="0.9"/>
+      <line x1="18" y1="24" x2="38" y2="24" stroke="#c8d6e5" stroke-width="0.8"/>
+      <line x1="18" y1="28" x2="36" y2="28" stroke="#c8d6e5" stroke-width="0.8"/>
+      <line x1="18" y1="32" x2="32" y2="32" stroke="#c8d6e5" stroke-width="0.8"/>
+      <!-- front panel -->
+      <rect x="6" y="22" width="52" height="32" rx="4" fill="url(#folder-front)" opacity="0.95"/>
+      <!-- front shine -->
+      <path d="M10 24 C20 22, 40 22, 54 24" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <!-- fold detail -->
+      <line x1="6" y1="28" x2="58" y2="28" stroke="rgba(0,0,0,0.08)" stroke-width="0.5"/>
+    </g>
+  </svg>`,
 
-  maps: styled(
-    // map-trifold duotone
-    'M160,72V216L96,184V40Z',
-    // map-trifold outline
-    'M228.92,49.69a8,8,0,0,0-6.86-1.45L160.93,63.52,99.58,32.84a8,8,0,0,0-5.52-.6l-64,16A8,8,0,0,0,24,56V200a8,8,0,0,0,9.94,7.76l61.13-15.28,61.35,30.68A8.15,8.15,0,0,0,160,224a8,8,0,0,0,1.94-.24l64-16A8,8,0,0,0,232,200V56A8,8,0,0,0,228.92,49.69ZM104,52.94l48,24V203.06l-48-24ZM40,62.25l48-12v127.5l-48,12Zm176,131.5-48,12V78.25l48-12Z'
-  ),
+  /* ── Maps: folded map with colorful sections + red pin ── */
+  maps: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="map-land" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#a8e063"/><stop offset="1" stop-color="#56ab2f"/>
+      </linearGradient>
+      <linearGradient id="map-sea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#67b8ff"/><stop offset="1" stop-color="#2b62ff"/>
+      </linearGradient>
+      <linearGradient id="map-pin" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ff5b5b"/><stop offset="1" stop-color="#d81b60"/>
+      </linearGradient>
+      <linearGradient id="map-paper" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#f8f4e8"/><stop offset="1" stop-color="#e8dfc8"/>
+      </linearGradient>
+      <filter id="map-shadow"><feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="rgba(0,0,0,0.3)"/></filter>
+      <filter id="pin-shadow"><feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="rgba(0,0,0,0.4)"/></filter>
+    </defs>
+    <!-- folded map -->
+    <g filter="url(#map-shadow)">
+      <path d="M6 10 L18 6 L32 10 L46 6 L58 10 L58 50 L46 54 L32 50 L18 54 L6 50 Z" fill="url(#map-paper)" stroke="rgba(180,170,150,0.4)" stroke-width="0.5"/>
+      <!-- sections -->
+      <path d="M8 12 L18 8 L18 52 L8 48 Z" fill="url(#map-sea)" opacity="0.8"/>
+      <path d="M18 8 L32 12 L32 50 L18 52 Z" fill="url(#map-land)" opacity="0.85"/>
+      <path d="M32 12 L46 8 L46 52 L32 50 Z" fill="url(#map-sea)" opacity="0.75"/>
+      <path d="M46 8 L56 12 L56 48 L46 52 Z" fill="url(#map-land)" opacity="0.7"/>
+      <!-- fold lines -->
+      <line x1="18" y1="8" x2="18" y2="52" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
+      <line x1="32" y1="10" x2="32" y2="50" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
+      <line x1="46" y1="8" x2="46" y2="52" stroke="rgba(0,0,0,0.12)" stroke-width="0.5"/>
+      <!-- road -->
+      <path d="M12 30 C18 25, 24 35, 30 28 C36 22, 42 32, 52 26" stroke="rgba(255,255,255,0.6)" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-dasharray="2 1.5"/>
+    </g>
+    <!-- pin -->
+    <g filter="url(#pin-shadow)" class="pin-bounce">
+      <path d="M34 16 C34 11, 38 8, 42 8 C46 8, 50 11, 50 16 C50 22, 42 30, 42 30 C42 30, 34 22, 34 16 Z" fill="url(#map-pin)"/>
+      <circle cx="42" cy="15.5" r="3.5" fill="rgba(255,255,255,0.7)"/>
+      <!-- pin shadow on map -->
+      <ellipse cx="42" cy="32" rx="4" ry="1.5" fill="rgba(0,0,0,0.15)"/>
+    </g>
+  </svg>`,
 
-  photos: styled(
-    // image duotone
-    'M224,56V178.06l-39.72-39.72a8,8,0,0,0-11.31,0L147.31,164,97.66,114.34a8,8,0,0,0-11.32,0L32,168.69V56a8,8,0,0,1,8-8H216A8,8,0,0,1,224,56Z',
-    // image outline
-    'M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V158.75l-26.07-26.06a16,16,0,0,0-22.63,0l-20,20-44-44a16,16,0,0,0-22.62,0L40,149.37V56ZM40,172l52-52,80,80H40Zm176,28H194.63l-36-36,20-20L216,181.38V200ZM144,100a12,12,0,1,1,12,12A12,12,0,0,1,144,100Z'
-  ),
-
-  calendar: styled(
-    // calendar-dots duotone
-    'M216,48V88H40V48a8,8,0,0,1,8-8H208A8,8,0,0,1,216,48Z',
-    // calendar-dots outline
-    'M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-68-76a12,12,0,1,1-12-12A12,12,0,0,1,140,132Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,132ZM96,172a12,12,0,1,1-12-12A12,12,0,0,1,96,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,140,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,172Z'
-  ),
+  /* ── Photos: overlapping polaroids with landscape scene ── */
+  photos: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="photo-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#74b9ff"/><stop offset="0.6" stop-color="#a29bfe"/><stop offset="1" stop-color="#dfe6e9"/>
+      </linearGradient>
+      <linearGradient id="photo-mt" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#636e72"/><stop offset="1" stop-color="#2d3436"/>
+      </linearGradient>
+      <linearGradient id="photo-grass" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#00b894"/><stop offset="1" stop-color="#00a381"/>
+      </linearGradient>
+      <radialGradient id="photo-sun" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" stop-color="#ffeaa7"/><stop offset="1" stop-color="#fdcb6e"/>
+      </radialGradient>
+      <filter id="photo-shadow"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.3)"/></filter>
+    </defs>
+    <!-- back polaroid -->
+    <g transform="translate(4,6) rotate(-8 28 28)" filter="url(#photo-shadow)">
+      <rect x="6" y="4" width="36" height="42" rx="3" fill="#f5f5f0"/>
+      <rect x="9" y="7" width="30" height="28" rx="2" fill="#c8d6e5"/>
+    </g>
+    <!-- front polaroid with scene -->
+    <g transform="translate(10,4)" filter="url(#photo-shadow)">
+      <rect x="6" y="6" width="40" height="46" rx="3" fill="#fafaf5"/>
+      <rect x="9" y="9" width="34" height="30" rx="2" fill="url(#photo-sky)" overflow="hidden"/>
+      <!-- sun -->
+      <circle cx="36" cy="16" r="5" fill="url(#photo-sun)" class="sun-pulse"/>
+      <!-- mountains -->
+      <polygon points="9,39 20,22 28,32 32,26 43,39" fill="url(#photo-mt)" opacity="0.8"/>
+      <polygon points="15,39 28,28 43,39" fill="#4a6741" opacity="0.6"/>
+      <!-- snow caps -->
+      <polygon points="20,22 22,25 18,25" fill="rgba(255,255,255,0.7)"/>
+      <polygon points="32,26 34,29 30,29" fill="rgba(255,255,255,0.6)"/>
+      <!-- grass -->
+      <rect x="9" y="35" width="34" height="4" rx="0" fill="url(#photo-grass)" opacity="0.9"/>
+      <!-- caption area -->
+      <rect x="14" y="42" width="20" height="2" rx="1" fill="#ddd" opacity="0.5"/>
+    </g>
+  </svg>`,
 
 };
