@@ -103,7 +103,8 @@
 /* === APP SPECIFIC STYLES === */
 
 /* Settings - Metal Gear */
-.app-icon-settings .bubbly-icon-content {
+.app-icon-settings .bubbly-icon-content,
+.app-icon-settings .hex-icon-content {
     background: linear-gradient(135deg, #4b6cb7, #182848);
     display: flex;
     align-items: center;
@@ -156,7 +157,8 @@
 }
 
 /* Browser - 3D Globe */
-.app-icon-browser .bubbly-icon-content {
+.app-icon-browser .bubbly-icon-content,
+.app-icon-browser .hex-icon-content {
     background: linear-gradient(135deg, #00c6ff, #0072ff);
     display: flex;
     align-items: center;
@@ -209,7 +211,9 @@
 
 /* FILES (Blue Glass Folder) - Max Visibility */
 .app-icon-files .bubbly-icon-content,
-.app-icon-folder .bubbly-icon-content {
+.app-icon-folder .bubbly-icon-content,
+.app-icon-files .hex-icon-content,
+.app-icon-folder .hex-icon-content {
     background: linear-gradient(135deg, #2980b9, #6dd5fa);
     display: flex;
     align-items: center;
@@ -261,7 +265,8 @@
 }
 
 /* CALCULATOR — Icon fit hardened (no bottom cut) */
-.app-icon-calculator .bubbly-icon-content{
+.app-icon-calculator .bubbly-icon-content,
+.app-icon-calculator .hex-icon-content{
     background: linear-gradient(135deg, #2d3436, #000000);
     display:flex;
     flex-direction:column;
@@ -328,7 +333,8 @@
 
 
 /* WEATHER - Distinct Elements */
-.app-icon-weather .bubbly-icon-content {
+.app-icon-weather .bubbly-icon-content,
+.app-icon-weather .hex-icon-content {
     background: linear-gradient(to top, #4facfe, #00f2fe);
     position: relative;
     overflow: hidden;
@@ -410,7 +416,8 @@
 }
 
 /* CLOCK - Mobile Optimized & Visible Markings */
-.app-icon-clock .bubbly-icon-content {
+.app-icon-clock .bubbly-icon-content,
+.app-icon-clock .hex-icon-content {
     background: radial-gradient(circle, #232526, #414345);
     display: flex;
     justify-content: center;
@@ -496,7 +503,8 @@
 }
 
 /* NOTES - Solid Paper Stack */
-.app-icon-notes .bubbly-icon-content {
+.app-icon-notes .bubbly-icon-content,
+.app-icon-notes .hex-icon-content {
     background: linear-gradient(135deg, #fce38a, #f38181);
     display: flex;
     align-items: center;
@@ -589,6 +597,7 @@
 
 /* Unified "arcade glass" base so the games look like one premium set */
 .bubbly-icon-content.smart-game,
+.hex-icon-content.smart-game,
 .smart-game{
     position: relative;
     overflow: hidden;
@@ -598,15 +607,15 @@
 }
 
 /* Accent glow per game (subtle, consistent) */
-.app-icon-snake .bubbly-icon-content{ --game-accent: rgba(60,255,180,0.55); }
-.app-icon-memory .bubbly-icon-content{ --game-accent: rgba(120,210,255,0.55); }
-.app-icon-tictactoe .bubbly-icon-content{ --game-accent: rgba(255,120,210,0.55); }
-.app-icon-minesweeper .bubbly-icon-content{ --game-accent: rgba(255,205,120,0.55); }
-.app-icon-solitaire .bubbly-icon-content{ --game-accent: rgba(255,110,130,0.55); }
-.app-icon-spider-solitaire .bubbly-icon-content{ --game-accent: rgba(255,90,110,0.55); }
-.app-icon-mahjong .bubbly-icon-content{ --game-accent: rgba(120,255,200,0.55); }
-.app-icon-tarneeb .bubbly-icon-content{ --game-accent: rgba(100,120,255,0.55); }
-.app-icon-trix .bubbly-icon-content{ --game-accent: rgba(180,80,255,0.55); }
+.app-icon-snake .bubbly-icon-content, .app-icon-snake .hex-icon-content{ --game-accent: rgba(60,255,180,0.55); }
+.app-icon-memory .bubbly-icon-content, .app-icon-memory .hex-icon-content{ --game-accent: rgba(120,210,255,0.55); }
+.app-icon-tictactoe .bubbly-icon-content, .app-icon-tictactoe .hex-icon-content{ --game-accent: rgba(255,120,210,0.55); }
+.app-icon-minesweeper .bubbly-icon-content, .app-icon-minesweeper .hex-icon-content{ --game-accent: rgba(255,205,120,0.55); }
+.app-icon-solitaire .bubbly-icon-content, .app-icon-solitaire .hex-icon-content{ --game-accent: rgba(255,110,130,0.55); }
+.app-icon-spider-solitaire .bubbly-icon-content, .app-icon-spider-solitaire .hex-icon-content{ --game-accent: rgba(255,90,110,0.55); }
+.app-icon-mahjong .bubbly-icon-content, .app-icon-mahjong .hex-icon-content{ --game-accent: rgba(120,255,200,0.55); }
+.app-icon-tarneeb .bubbly-icon-content, .app-icon-tarneeb .hex-icon-content{ --game-accent: rgba(100,120,255,0.55); }
+.app-icon-trix .bubbly-icon-content, .app-icon-trix .hex-icon-content{ --game-accent: rgba(180,80,255,0.55); }
 
 .app-icon-snake .bubbly-icon-content::before,
 .app-icon-memory .bubbly-icon-content::before,
@@ -616,7 +625,16 @@
 .app-icon-spider-solitaire .bubbly-icon-content::before,
 .app-icon-mahjong .bubbly-icon-content::before,
 .app-icon-tarneeb .bubbly-icon-content::before,
-.app-icon-trix .bubbly-icon-content::before{
+.app-icon-trix .bubbly-icon-content::before,
+.app-icon-snake .hex-icon-content::before,
+.app-icon-memory .hex-icon-content::before,
+.app-icon-tictactoe .hex-icon-content::before,
+.app-icon-minesweeper .hex-icon-content::before,
+.app-icon-solitaire .hex-icon-content::before,
+.app-icon-spider-solitaire .hex-icon-content::before,
+.app-icon-mahjong .hex-icon-content::before,
+.app-icon-tarneeb .hex-icon-content::before,
+.app-icon-trix .hex-icon-content::before{
     content: '';
     position: absolute;
     inset: -30%;
@@ -645,7 +663,8 @@
 }
 
 /* shared SVG look */
-.bubbly-icon-content .game-svg{
+.bubbly-icon-content .game-svg,
+.hex-icon-content .game-svg{
     width: 86%;
     height: 86%;
     display:block;

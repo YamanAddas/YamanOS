@@ -26,7 +26,7 @@ export class FolderIcon {
 
   render() {
     const root = el('div', {
-      class: 'bubbly-icon folder-bubbly folder-glass3d',
+      class: 'hex-icon folder-hex folder-glass3d',
       'data-app-id': this.folderItem.id,
       title: this.folderItem.title || 'Folder'
     });
@@ -57,7 +57,7 @@ export class FolderIcon {
     this._onMove = onMove;
     this._onLeave = onLeave;
 
-    const content = el('div', { class: 'bubbly-icon-content folder-bubbly-content' });
+    const content = el('div', { class: 'hex-icon-content folder-hex-content' });
 
     // ── Mini-icon grid (2×2 like iOS) ───────────────────────
     const previewGrid = el('div', { class: 'folder-preview-grid folder-preview-2x2' });

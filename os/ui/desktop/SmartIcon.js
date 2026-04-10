@@ -3,8 +3,9 @@ import { FolderIcon } from "../components/FolderIcon.js";
 import { GAME_ICONS } from "../components/GameIcons.js";
 
 /**
- * SmartIcon Component
- * Renders a "Bubbly 3D" icon that can be static or dynamic (Clock, Calendar, etc.)
+ * SmartIcon Component — v2.0 Hex
+ * Renders hexagonal icons with the YancoHub cosmic glass design language.
+ * Each icon uses clip-path: var(--hex-clip) for the signature hex shape.
  */
 export class SmartIcon {
     constructor(appId, metadata = {}) {
@@ -15,24 +16,19 @@ export class SmartIcon {
     }
 
     render() {
-        // 1. Base Container
+        // 1. Base hex container
         this.root = el("div", {
-            class: `bubbly-icon app-icon-${this.appId}`,
+            class: `hex-icon app-icon-${this.appId}`,
             "data-app-id": this.appId,
             title: this.metadata.name || this.appId
         });
 
-        // 2. Wrap content in .bubbly-icon-content for clipping/backgrounds
-        const contentWrapper = el("div", { class: "bubbly-icon-content" });
+        // 2. Inner content area (clipped by hex shape)
+        const contentWrapper = el("div", { class: "hex-icon-content" });
 
         // 3. Render content based on type
         if (this.metadata.type === 'folder' || this.appId.startsWith('folder')) {
-            // Direct folder render using shared FolderIcon component
             const folderIcon = new FolderIcon({ id: this.appId, title: this.metadata.name }, this.metadata.children || []);
-            // We only need the content part, but FolderIcon returns a full root.
-            // We can just append the FolderIcon's root directly and skip our wrapper,
-            // OR we can refactor. For now, let's just return the FolderIcon's root
-            // because it already has the bubbly classes.
             return folderIcon.render();
         }
 

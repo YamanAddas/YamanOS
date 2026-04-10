@@ -228,6 +228,8 @@ div.boot-screen .boot-text {
   border: none;
   position: relative;
   transition: all var(--transition-normal);
+  overflow: hidden;
+  cursor: pointer;
 }
 
 /* Hex glow border effect via pseudo-element */
@@ -245,12 +247,52 @@ div.boot-screen .boot-text {
   background: linear-gradient(135deg, rgba(0, 229, 193, 0.3), rgba(0, 229, 193, 0.1));
 }
 
+.hex-icon:active {
+  transform: scale(0.92);
+}
+
+/* Inner content — fills the hex, clips to hex shape */
+.hex-icon-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .hex-icon img {
   width: 32px;
   height: 32px;
   border-radius: var(--radius-sm);
   object-fit: cover;
 }
+
+/* ── Hex App-Specific Backgrounds ── */
+.app-icon-settings .hex-icon-content { background: linear-gradient(135deg, #1a2a4a, #0d1b36); }
+.app-icon-browser .hex-icon-content { background: linear-gradient(135deg, #003d66, #005f99); }
+.app-icon-weather .hex-icon-content { background: linear-gradient(to top, #0a3d6b, #1a6fa0); }
+.app-icon-clock .hex-icon-content { background: radial-gradient(circle, #111e36, #0a1020); }
+.app-icon-notes .hex-icon-content { background: linear-gradient(135deg, #8a6d3b, #3d2e1a); }
+.app-icon-files .hex-icon-content,
+.app-icon-folder .hex-icon-content { background: linear-gradient(135deg, #1a3a5c, #0d2240); }
+.app-icon-calculator .hex-icon-content { background: linear-gradient(135deg, #1a1a2e, #0a0a14); }
+.app-icon-calendar .hex-icon-content,
+.app-icon-date .hex-icon-content { background: linear-gradient(135deg, #1a2040, #0d1428); }
+.app-icon-photos .hex-icon-content { background: linear-gradient(135deg, #1a2a50, #0d1830); }
+.app-icon-maps .hex-icon-content { background: linear-gradient(135deg, #0d3328, #1a5040); }
+
+/* Game hex backgrounds */
+.app-icon-snake .hex-icon-content { --game-accent: rgba(40,255,170,0.35); }
+.app-icon-memory .hex-icon-content { --game-accent: rgba(120,190,255,0.35); }
+.app-icon-tictactoe .hex-icon-content { --game-accent: rgba(255,120,210,0.35); }
+.app-icon-minesweeper .hex-icon-content { --game-accent: rgba(255,200,110,0.35); }
+.app-icon-solitaire .hex-icon-content { --game-accent: rgba(255,90,120,0.35); }
+.app-icon-spider-solitaire .hex-icon-content { --game-accent: rgba(255,70,90,0.35); }
+.app-icon-mahjong .hex-icon-content { --game-accent: rgba(120,255,200,0.35); }
+.app-icon-tarneeb .hex-icon-content { --game-accent: rgba(100,120,255,0.35); }
+.app-icon-trix .hex-icon-content { --game-accent: rgba(180,80,255,0.35); }
 
 .hex-icon-label {
   font-size: var(--font-xs);
@@ -283,6 +325,28 @@ div.boot-screen .boot-text {
   border-top: 1px solid var(--border-accent);
 }
 
+/* Dock icon containers */
+.m-dock-item {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.m-dock-item:active {
+  transform: scale(0.88);
+}
+
+/* Hex icons inside dock fill the container */
+.m-dock-item .hex-icon,
+.m-dock-item .app-icon-inner {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .dock-item {
   display: flex;
   flex-direction: column;
@@ -291,7 +355,7 @@ div.boot-screen .boot-text {
   position: relative;
 }
 
-.dock-icon {
+.dock-icon:not(.m-dock-item) {
   width: 52px;
   height: 52px;
   clip-path: var(--hex-clip);
@@ -304,7 +368,7 @@ div.boot-screen .boot-text {
   position: relative;
 }
 
-.dock-icon::before {
+.dock-icon:not(.m-dock-item)::before {
   content: '';
   position: absolute;
   inset: -1px;
@@ -313,7 +377,7 @@ div.boot-screen .boot-text {
   z-index: -1;
 }
 
-.dock-item:active .dock-icon {
+.dock-item:active .dock-icon:not(.m-dock-item) {
   transform: scale(0.88);
 }
 
@@ -462,6 +526,27 @@ div.boot-screen .boot-text {
   height: 1px;
   margin: var(--space-xs) 0;
   background: var(--border);
+}
+
+/* ── Hex Folder Icon ── */
+.folder-hex {
+  cursor: pointer;
+}
+
+.folder-glass3d .folder-hex-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.folder-hex .folder-preview-grid {
+  background:
+    radial-gradient(120% 120% at var(--fx, 50%) var(--fy, 35%),
+      rgba(0, 229, 193, 0.12), rgba(0, 229, 193, 0.03) 50%, rgba(0, 0, 0, 0.1) 100%),
+    linear-gradient(180deg, rgba(8, 18, 32, 0.9) 0%, rgba(6, 11, 20, 0.95) 100%);
+  border: none;
+  border-radius: 0;
 }
 
 /* ── Folder Overlay ── */

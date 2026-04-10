@@ -72,7 +72,7 @@ export class Dock {
 
       const smartIcon = new SmartIcon(item.id, metadata);
       const iconNode = smartIcon.render();
-      const dockItem = el('div', { class: 'm-dock-item dock-icon', 'data-id': item.id });
+      const dockItem = el('div', { class: 'm-dock-item', 'data-id': item.id });
       dockItem.style.touchAction = 'none';
       dockItem.style.userSelect = 'none';
       dockItem.style.webkitUserSelect = 'none';
