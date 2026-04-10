@@ -28,18 +28,8 @@ export class CalculatorApp extends App {
     buildLayout() {
         this.shell = el('div', { class: 'calc-shell' });
 
-        this.header = el('div', { class: 'calc-header' }, [
-            el('div', { class: 'calc-solar-panel' }),
-            this.brand = el('div', { class: 'calc-brand' }, 'Yaman Instruments'),
-            this.closeBtn = el('button', {
-                class: 'calc-power-btn',
-                type: 'button',
-                title: 'Power Off',
-                onclick: () => this.close(),
-            }, 'OFF'),
-        ]);
-
         this.display = el('div', { class: 'calc-display' }, [
+            this.expressionText = el('div', { class: 'calc-expression' }, ''),
             this.displayText = el('div', { class: 'calc-display-text' }, '0'),
         ]);
 
@@ -61,7 +51,6 @@ export class CalculatorApp extends App {
             this.keypad.appendChild(rowEl);
         });
 
-        this.shell.appendChild(this.header);
         this.shell.appendChild(this.display);
         this.shell.appendChild(this.keypad);
         return this.shell;
@@ -345,7 +334,6 @@ export class CalculatorApp extends App {
 
         if (func === 'rad') {
             this.state.angleMode = this.state.angleMode === 'rad' ? 'deg' : 'rad';
-            this.brand.textContent = `Yaman Instruments ${this.state.angleMode.toUpperCase()}`;
             return;
         }
 
@@ -488,6 +476,11 @@ export class CalculatorApp extends App {
         this.updateDisplay();
     }
 
+    _opSymbol(op) {
+        const map = { '+': '+', '-': '\u2212', '*': '\u00D7', '/': '\u00F7', '^': '^', 'yroot': '\u02B8\u221A' };
+        return map[op] || op || '';
+    }
+
     updateDisplay() {
         let val = this.state.current;
         if (val !== 'Error' && val.length > 16) {
@@ -498,6 +491,19 @@ export class CalculatorApp extends App {
         }
         this.displayText.textContent = val;
         this.displayText.title = val;
+
+        if (this.expressionText) {
+            if (this.state.previous !== null && this.state.operator) {
+                this.expressionText.textContent = `${this.state.previous} ${this._opSymbol(this.state.operator)}`;
+            } else {
+                this.expressionText.textContent = '';
+            }
+        }
+
+        const len = val.length;
+        if (len > 12) this.displayText.style.fontSize = 'clamp(28px, 7vw, 36px)';
+        else if (len > 9) this.displayText.style.fontSize = 'clamp(34px, 9vw, 48px)';
+        else this.displayText.style.fontSize = '';
     }
 
     destroy() {

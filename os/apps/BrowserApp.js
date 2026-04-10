@@ -158,35 +158,33 @@ export class BrowserApp extends App {
         return out.slice(-Math.max(10, this.prefs.historyLimit));
     }
 
+    _getGreeting() {
+        const h = new Date().getHours();
+        if (h < 5) return 'Good Night';
+        if (h < 12) return 'Good Morning';
+        if (h < 17) return 'Good Afternoon';
+        if (h < 21) return 'Good Evening';
+        return 'Good Night';
+    }
+
+    _getTimeStr() {
+        return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
     render() {
         this.root.innerHTML = '';
 
         const shell = el('div', { class: `bb-shell bb-theme-${this.prefs.startTheme}` });
-        const header = el('header', { class: 'bb-header' }, [
-            el('div', { class: 'bb-title-wrap' }, [
-                el('div', { class: 'bb-title' }, 'Browser'),
-                el('div', { class: 'bb-subtitle' }, 'Always opens websites in a new tab'),
-            ]),
-            el('div', { class: 'bb-header-actions' }, [
-                el('span', { class: 'bb-mode-pill' }, 'New Tab Mode'),
-                el('button', {
-                    class: 'bb-close',
-                    type: 'button',
-                    onclick: () => this.close(),
-                    'aria-label': 'Close Browser',
-                }, '✕'),
-            ]),
-        ]);
 
         const scroll = el('div', { class: 'bb-scroll' });
         scroll.append(
             this._buildHero(),
-            this._buildActions(),
             this._buildBookmarksSection(),
+            this._buildActions(),
             this._buildHistorySection(),
         );
 
-        shell.append(header, scroll);
+        shell.append(scroll);
         this.root.appendChild(shell);
     }
 
@@ -197,7 +195,7 @@ export class BrowserApp extends App {
             spellcheck: 'false',
             autocapitalize: 'off',
             autocomplete: 'off',
-            placeholder: 'Search or type a URL…',
+            placeholder: 'Search or enter URL...',
             value: this.state.currentUrl || '',
             onkeydown: (event) => {
                 if (event.key !== 'Enter') return;
@@ -221,14 +219,11 @@ export class BrowserApp extends App {
         });
 
         return el('section', { class: 'bb-hero' }, [
-            el('div', { class: 'bb-hero-title' }, 'Search The Web'),
+            el('div', { class: 'bb-hero-time' }, this._getTimeStr()),
+            el('div', { class: 'bb-hero-greeting' }, this._getGreeting()),
             el('div', { class: 'bb-search-row' }, [
+                el('div', { class: 'bb-search-icon' }, '\uD83D\uDD0D'),
                 this.queryInput,
-                el('button', {
-                    class: 'bb-go-btn',
-                    type: 'button',
-                    onclick: () => this.navigate(this.queryInput.value),
-                }, 'Go'),
             ]),
             engineRow,
         ]);
@@ -236,54 +231,45 @@ export class BrowserApp extends App {
 
     _buildActions() {
         return el('div', { class: 'bb-actions' }, [
-            this._actionButton('Add Bookmark', () => this.addBookmarkPrompt(this.queryInput?.value || this.state.currentUrl)),
-            this._actionButton('Clear History', () => this.clearHistory()),
-            this._actionButton('Theme', () => this.cycleTheme()),
+            this._actionButton('\u2795 Bookmark', () => this.addBookmarkPrompt(this.queryInput?.value || this.state.currentUrl)),
+            this._actionButton('\uD83C\uDFA8 Theme', () => this.cycleTheme()),
+            this._actionButton('\uD83D\uDDD1 History', () => this.clearHistory()),
         ]);
     }
 
     _buildBookmarksSection() {
-        const section = el('section', { class: 'bb-section' }, [
-            this._sectionHeader('Favorites', `${this.state.bookmarks.length} saved`),
-            el('div', { class: 'bb-grid' }),
-        ]);
-        const grid = section.querySelector('.bb-grid');
+        const grid = el('div', { class: 'bb-grid' });
 
         this.state.bookmarks.forEach((bookmark, index) => {
-            const card = el('article', { class: 'bb-card' }, [
-                el('button', {
-                    class: 'bb-card-open',
-                    type: 'button',
-                    onclick: () => this.navigate(bookmark.url),
-                }, [
+            const tile = el('button', {
+                class: 'bb-tile',
+                type: 'button',
+                onclick: () => this.navigate(bookmark.url),
+                title: bookmark.url,
+            }, [
+                el('div', { class: 'bb-tile-icon' }, [
                     el('img', {
                         class: 'bb-favicon',
                         src: this._faviconForUrl(bookmark.url),
                         alt: '',
                         loading: 'lazy',
                     }),
-                    el('div', { class: 'bb-card-label', title: bookmark.label }, bookmark.label),
-                    el('div', { class: 'bb-card-meta', title: bookmark.url }, this._hostFromUrl(bookmark.url) || bookmark.url),
                 ]),
-                el('div', { class: 'bb-card-actions' }, [
-                    el('button', {
-                        class: 'bb-mini-btn',
-                        type: 'button',
-                        title: 'Edit bookmark',
-                        onclick: () => this.editBookmark(index),
-                    }, 'Edit'),
-                    el('button', {
-                        class: 'bb-mini-btn is-danger',
-                        type: 'button',
-                        title: 'Remove bookmark',
-                        onclick: () => this.removeBookmark(index),
-                    }, 'Remove'),
-                ]),
+                el('div', { class: 'bb-tile-label' }, bookmark.label),
+                el('button', {
+                    class: 'bb-tile-remove',
+                    type: 'button',
+                    title: 'Remove',
+                    onclick: (e) => { e.stopPropagation(); this.removeBookmark(index); },
+                }, '\u00D7'),
             ]);
-            grid.appendChild(card);
+            grid.appendChild(tile);
         });
 
-        return section;
+        return el('section', { class: 'bb-section bb-tiles-section' }, [
+            this._sectionHeader('Quick Access', `${this.state.bookmarks.length}`),
+            grid,
+        ]);
     }
 
     _buildHistorySection() {

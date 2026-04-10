@@ -1243,6 +1243,7 @@ body.theme-light {
 
 /* ── Browser App V2 ── */
 /* ---------- Browser App V2 (New-Tab Native) ---------- */
+/* ── Browser App v2.0 — Modern New Tab ── */
 .app-browser-v2 {
   position: fixed;
   inset: 0;
@@ -1253,7 +1254,7 @@ body.theme-light {
   overflow: hidden;
   color: #eaf1ff;
   font-family: "Space Grotesk", "Avenir Next", "SF Pro Display", system-ui, sans-serif;
-  background: #090f1b;
+  background: #000;
 }
 
 .app-browser-v2 .bb-shell {
@@ -1265,223 +1266,150 @@ body.theme-light {
   position: relative;
 }
 
-.app-browser-v2 .bb-shell::before,
-.app-browser-v2 .bb-shell::after {
+.app-browser-v2 .bb-shell::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 0;
 }
 
 .app-browser-v2 .bb-theme-aurora::before {
   background:
-    radial-gradient(65% 48% at 8% 0%, rgba(96, 144, 255, 0.38), transparent 52%),
-    radial-gradient(70% 56% at 88% 12%, rgba(90, 228, 214, 0.24), transparent 58%);
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(96, 144, 255, 0.3), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(90, 228, 214, 0.18), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(94, 240, 176, 0.12), transparent 50%);
 }
 
 .app-browser-v2 .bb-theme-graphite::before {
   background:
-    radial-gradient(70% 52% at 12% 0%, rgba(144, 156, 186, 0.26), transparent 52%),
-    radial-gradient(80% 56% at 86% 10%, rgba(102, 126, 174, 0.2), transparent 62%);
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(144, 156, 186, 0.2), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(102, 126, 174, 0.14), transparent 50%);
 }
 
 .app-browser-v2 .bb-theme-midnight::before {
   background:
-    radial-gradient(70% 56% at 14% 0%, rgba(122, 84, 211, 0.24), transparent 52%),
-    radial-gradient(72% 56% at 86% 10%, rgba(46, 98, 212, 0.2), transparent 58%);
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(122, 84, 211, 0.22), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(46, 98, 212, 0.18), transparent 50%);
 }
 
-.app-browser-v2 .bb-shell::after {
-  background: linear-gradient(180deg, rgba(8, 12, 22, 0.68), rgba(7, 11, 21, 0.94));
-}
-
-.app-browser-v2 .bb-header,
-.app-browser-v2 .bb-scroll {
-  position: relative;
-  z-index: 1;
-}
-
-.app-browser-v2 .bb-header {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: calc(env(safe-area-inset-top, 0px) + 10px) 14px 10px;
-  border-bottom: 1px solid rgba(136, 179, 245, 0.2);
-  background: rgba(8, 13, 24, 0.72);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
-.app-browser-v2 .bb-title-wrap {
-  min-width: 0;
-  display: grid;
-  gap: 2px;
-}
-
-.app-browser-v2 .bb-title {
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-}
-
-.app-browser-v2 .bb-subtitle {
-  font-size: 12px;
-  color: rgba(201, 217, 247, 0.74);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.app-browser-v2 .bb-header-actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.app-browser-v2 .bb-mode-pill {
-  border-radius: 999px;
-  padding: 7px 11px;
-  border: 1px solid rgba(136, 181, 245, 0.34);
-  background: rgba(80, 138, 224, 0.2);
-  font-size: 11px;
-  font-weight: 650;
-  white-space: nowrap;
-}
-
-.app-browser-v2 .bb-close {
-  width: 34px;
-  height: 34px;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(255, 128, 128, 0.22);
-  color: #ffd9d9;
-  font-size: 16px;
-}
-
+/* ── Scroll container ── */
 .app-browser-v2 .bb-scroll {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
-  padding: 14px 14px max(26px, calc(env(safe-area-inset-bottom, 0px) + 20px));
-  display: grid;
-  gap: 14px;
+  padding: calc(env(safe-area-inset-top, 0px) + 20px) 20px max(30px, calc(env(safe-area-inset-bottom, 0px) + 24px));
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
 }
 
-.app-browser-v2 .bb-hero,
-.app-browser-v2 .bb-section {
-  border-radius: 20px;
-  border: 1px solid rgba(133, 177, 245, 0.26);
-  background: linear-gradient(165deg, rgba(18, 28, 48, 0.78), rgba(10, 18, 34, 0.86));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 18px 28px rgba(0, 0, 0, 0.32);
-}
-
+/* ── Hero — greeting + search ── */
 .app-browser-v2 .bb-hero {
-  padding: 16px;
-  display: grid;
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: clamp(24px, 6vh, 48px) 16px 20px;
 }
 
-.app-browser-v2 .bb-hero-title {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(202, 219, 246, 0.85);
+.app-browser-v2 .bb-hero-time {
+  font-size: clamp(48px, 10vw, 72px);
+  font-weight: 200;
+  letter-spacing: -0.04em;
+  color: #fff;
+  line-height: 1;
+}
+
+.app-browser-v2 .bb-hero-greeting {
+  font-size: clamp(16px, 3.5vw, 22px);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.02em;
 }
 
 .app-browser-v2 .bb-search-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 10px;
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 0 16px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.app-browser-v2 .bb-search-row:focus-within {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.app-browser-v2 .bb-search-icon {
+  font-size: 16px;
+  opacity: 0.4;
+  flex-shrink: 0;
+  margin-right: 8px;
 }
 
 .app-browser-v2 .bb-input {
   min-width: 0;
-  min-height: 46px;
-  border-radius: 14px;
-  border: 1px solid rgba(140, 185, 245, 0.28);
-  background: rgba(8, 14, 25, 0.72);
-  color: #edf4ff;
-  padding: 0 12px;
-  font-size: 15px;
+  flex: 1;
+  min-height: 50px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  padding: 0;
+  font-size: 16px;
   outline: none;
 }
 
 .app-browser-v2 .bb-input::placeholder {
-  color: rgba(191, 210, 241, 0.58);
-}
-
-.app-browser-v2 .bb-go-btn {
-  border: 0;
-  border-radius: 14px;
-  min-width: 74px;
-  background: linear-gradient(160deg, #5da9ff, #317ce8);
-  color: #f3f9ff;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 0 14px;
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .app-browser-v2 .bb-engine-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  justify-content: center;
 }
 
 .app-browser-v2 .bb-engine-btn {
-  border: 1px solid rgba(130, 175, 240, 0.26);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 999px;
-  min-height: 34px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #d9e8ff;
-  padding: 0 12px;
+  min-height: 32px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.55);
+  padding: 0 14px;
   font-size: 12px;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
 .app-browser-v2 .bb-engine-btn.is-active {
-  background: rgba(55, 140, 255, 0.34);
-  border-color: rgba(120, 190, 255, 0.52);
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
   color: #fff;
 }
 
-.app-browser-v2 .bb-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
-}
-
-.app-browser-v2 .bb-action-btn,
-.app-browser-v2 .bb-mini-btn {
-  border: 1px solid rgba(135, 178, 242, 0.28);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #dcedff;
-  font-size: 12px;
-  font-weight: 650;
-  min-height: 34px;
-  padding: 0 12px;
-}
-
-.app-browser-v2 .bb-mini-btn {
-  min-height: 30px;
-  padding: 0 10px;
-  font-size: 11px;
-}
-
-.app-browser-v2 .bb-mini-btn.is-danger {
-  color: #ffd0d0;
-  border-color: rgba(255, 138, 138, 0.36);
-}
-
+/* ── Quick-access tiles ── */
 .app-browser-v2 .bb-section {
-  padding: 13px;
+  padding: 0;
   display: grid;
   gap: 12px;
+}
+
+.app-browser-v2 .bb-tiles-section {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .app-browser-v2 .bb-section-head {
@@ -1489,112 +1417,167 @@ body.theme-light {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  padding: 0 4px;
 }
 
 .app-browser-v2 .bb-section-title {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(202, 219, 246, 0.84);
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .app-browser-v2 .bb-section-meta {
   font-size: 11px;
-  color: rgba(180, 203, 241, 0.72);
+  color: rgba(255, 255, 255, 0.25);
 }
 
 .app-browser-v2 .bb-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
 }
 
-.app-browser-v2 .bb-card {
-  border: 1px solid rgba(134, 179, 244, 0.24);
+.app-browser-v2 .bb-tile {
+  position: relative;
+  border: none;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  overflow: hidden;
-  display: grid;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 14px 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.15s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.app-browser-v2 .bb-card-open {
-  border: 0;
-  background: transparent;
-  color: inherit;
-  width: 100%;
-  min-height: 114px;
+.app-browser-v2 .bb-tile:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.app-browser-v2 .bb-tile:active {
+  transform: scale(0.95);
+}
+
+.app-browser-v2 .bb-tile-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
   display: grid;
-  align-content: start;
-  justify-items: center;
-  gap: 7px;
-  padding: 10px 8px 8px;
-  text-align: center;
+  place-items: center;
+  overflow: hidden;
 }
 
 .app-browser-v2 .bb-favicon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: 1px solid rgba(140, 184, 242, 0.3);
-  background: rgba(255, 255, 255, 0.1);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
 }
 
-.app-browser-v2 .bb-card-label {
-  width: 100%;
-  font-size: 13px;
-  font-weight: 650;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.app-browser-v2 .bb-card-meta {
+.app-browser-v2 .bb-tile-label {
   width: 100%;
   font-size: 11px;
-  color: rgba(191, 210, 241, 0.72);
+  font-weight: 500;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: rgba(255, 255, 255, 0.75);
 }
 
-.app-browser-v2 .bb-card-actions {
+.app-browser-v2 .bb-tile-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+  display: grid;
+  place-items: center;
+}
+
+.app-browser-v2 .bb-tile:hover .bb-tile-remove {
+  opacity: 1;
+}
+
+/* ── Actions row ── */
+.app-browser-v2 .bb-actions {
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   justify-content: center;
-  gap: 7px;
-  padding: 0 8px 10px;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
 }
 
+.app-browser-v2 .bb-action-btn {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 600;
+  min-height: 36px;
+  padding: 0 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.app-browser-v2 .bb-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* ── History ── */
 .app-browser-v2 .bb-history-list {
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 
 .app-browser-v2 .bb-history-row {
-  border: 1px solid rgba(130, 174, 239, 0.22);
-  border-radius: 14px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.04);
-  padding: 10px;
+  padding: 10px 12px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
   align-items: center;
+  transition: background 0.15s;
+}
+
+.app-browser-v2 .bb-history-row:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .app-browser-v2 .bb-history-info {
   min-width: 0;
   display: grid;
-  gap: 3px;
+  gap: 2px;
 }
 
 .app-browser-v2 .bb-history-host {
   font-size: 13px;
-  font-weight: 650;
+  font-weight: 600;
 }
 
 .app-browser-v2 .bb-history-url {
   font-size: 11px;
-  color: rgba(189, 208, 240, 0.72);
+  color: rgba(255, 255, 255, 0.35);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1605,43 +1588,47 @@ body.theme-light {
   gap: 6px;
 }
 
+.app-browser-v2 .bb-mini-btn {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  font-weight: 600;
+  min-height: 28px;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.app-browser-v2 .bb-mini-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
 .app-browser-v2 .bb-empty {
-  border: 1px dashed rgba(137, 184, 248, 0.3);
-  border-radius: 14px;
-  min-height: 90px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  min-height: 80px;
   display: grid;
   place-items: center;
-  color: rgba(191, 210, 241, 0.72);
+  color: rgba(255, 255, 255, 0.3);
   font-size: 13px;
 }
 
-@media (max-width: 860px) {
+/* ── Responsive ── */
+@media (max-width: 500px) {
   .app-browser-v2 .bb-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 560px) {
-  .app-browser-v2 .bb-header {
-    padding-inline: 10px;
-  }
-
-  .app-browser-v2 .bb-mode-pill {
-    display: none;
-  }
-
-  .app-browser-v2 .bb-search-row {
-    grid-template-columns: 1fr;
-  }
-
-  .app-browser-v2 .bb-go-btn {
-    min-height: 40px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (orientation: landscape) and (max-width: 980px) {
   .app-browser-v2 .bb-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .app-browser-v2 .bb-hero {
+    padding: 12px 16px 16px;
   }
 }
 
@@ -3457,8 +3444,8 @@ body.is-mobile [contenteditable="true"] {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  background: linear-gradient(180deg, #071322 0%, #0a1b32 55%, #081423 100%);
-  color: #e4f4ff;
+  background: linear-gradient(180deg, #0a1628 0%, #060e1a 100%);
+  color: #e8f0ff;
   transition: background 0.8s ease;
   width: 100%;
   height: 100%;
@@ -3523,11 +3510,10 @@ body.is-mobile [contenteditable="true"] {
   gap: 16px;
   padding: 0 16px;
   z-index: 20;
-  background: rgba(7, 19, 34, 0.4);
-  /* Subtle backing for legibility */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(6, 14, 26, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .app-weather .weather-controls-row {
@@ -3717,12 +3703,12 @@ body.is-mobile [contenteditable="true"] {
 }
 
 .app-weather .weather-hero-card {
-  border-radius: 18px;
-  border: 1px solid rgba(163, 222, 255, 0.3);
-  background:
-    radial-gradient(circle at 85% 16%, rgba(124, 227, 255, 0.28), transparent 46%),
-    linear-gradient(160deg, rgba(88, 186, 245, 0.2), rgba(11, 33, 58, 0.45));
-  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 20px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 8px;
@@ -3736,11 +3722,11 @@ body.is-mobile [contenteditable="true"] {
 }
 
 .app-weather .weather-temp {
-  font-size: 54px;
+  font-size: 64px;
   line-height: 1;
-  font-weight: 300;
-  letter-spacing: -1px;
-  color: #f1fbff;
+  font-weight: 200;
+  letter-spacing: -2px;
+  color: #fff;
 }
 
 .app-weather .weather-condition {
@@ -3801,10 +3787,12 @@ body.is-mobile [contenteditable="true"] {
 }
 
 .app-weather .weather-card {
-  border-radius: 16px;
-  border: 1px solid rgba(163, 222, 255, 0.22);
-  background: rgba(255, 255, 255, 0.06);
-  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 14px;
   display: grid;
   gap: 10px;
   min-width: 0;
@@ -3829,15 +3817,16 @@ body.is-mobile [contenteditable="true"] {
 }
 
 .app-weather .weather-hour-card {
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.06);
-  padding: 10px 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 12px 8px;
   display: grid;
-  gap: 5px;
+  gap: 6px;
   justify-items: center;
   text-align: center;
   scroll-snap-align: start;
+  transition: background 0.15s;
 }
 
 .app-weather .weather-hour-time {
@@ -3880,11 +3869,12 @@ body.is-mobile [contenteditable="true"] {
   grid-template-columns: minmax(58px, 0.8fr) 28px 44px minmax(92px, 1fr);
   gap: 8px;
   align-items: center;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  padding: 8px 10px;
-  font-size: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px 12px;
+  font-size: 13px;
+  transition: background 0.15s;
 }
 
 .app-weather .weather-day-icon svg {
@@ -3904,24 +3894,25 @@ body.is-mobile [contenteditable="true"] {
 }
 
 .app-weather .weather-detail-tile {
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.04);
-  padding: 8px 9px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
   display: grid;
-  gap: 4px;
+  gap: 6px;
 }
 
 .app-weather .weather-detail-label {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
 .app-weather .weather-detail-value {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .app-weather .weather-location-list,
@@ -4333,6 +4324,7 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
   overflow: hidden !important;
 }
 
+/* ── Calculator App v2.0 — Modern iOS-style ── */
 .app-calculator {
   display: flex;
   flex-direction: column;
@@ -4342,11 +4334,19 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
   overflow: hidden;
   position: relative;
   --calc-bottom-obstruction: 0px;
-  --calc-gap: clamp(8px, 1.4vh, 12px);
-  --calc-pad-top: max(10px, calc(env(safe-area-inset-top, 0px) + 6px));
-  --calc-pad-right: max(12px, calc(env(safe-area-inset-right, 0px) + 8px));
-  --calc-pad-bottom: max(18px, calc(env(safe-area-inset-bottom, 0px) + 20px + var(--calc-bottom-obstruction, 0px)));
-  --calc-pad-left: max(12px, calc(env(safe-area-inset-left, 0px) + 8px));
+  --calc-gap: clamp(10px, 1.6vh, 14px);
+  --calc-pad-top: max(8px, calc(env(safe-area-inset-top, 0px) + 4px));
+  --calc-pad-right: max(14px, calc(env(safe-area-inset-right, 0px) + 10px));
+  --calc-pad-bottom: max(12px, calc(env(safe-area-inset-bottom, 0px) + 8px + var(--calc-bottom-obstruction, 0px)));
+  --calc-pad-left: max(14px, calc(env(safe-area-inset-left, 0px) + 10px));
+  --calc-num: #333338;
+  --calc-num-hover: #444449;
+  --calc-op: #ff9f0a;
+  --calc-op-hover: #ffb340;
+  --calc-fn: #616166;
+  --calc-fn-hover: #737378;
+  --calc-eq: #30d158;
+  --calc-eq-hover: #4be06e;
 }
 
 .app-calculator .calc-shell {
@@ -4354,46 +4354,51 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
   min-height: 0;
   width: 100%;
   display: grid;
-  grid-template-rows: auto minmax(90px, 0.85fr) minmax(0, 1fr);
+  grid-template-rows: minmax(60px, 1fr) minmax(0, 2.5fr);
   gap: var(--calc-gap);
   padding: var(--calc-pad-top) var(--calc-pad-right) var(--calc-pad-bottom) var(--calc-pad-left);
-  background: linear-gradient(145deg, rgba(45, 50, 60, 0.9), rgba(25, 30, 40, 0.95));
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
+  background: #000;
   box-sizing: border-box;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  transition: padding 220ms ease, gap 220ms ease, grid-template-rows 220ms ease;
+  overflow: hidden;
+  transition: padding 220ms ease, gap 220ms ease;
 }
 
+/* ── Display ── */
 .calc-display {
-  min-height: clamp(90px, 20vh, 160px);
   display: flex;
+  flex-direction: column;
   align-items: flex-end;
   justify-content: flex-end;
-  padding: clamp(8px, 1.4vh, 12px) clamp(12px, 2vw, 18px);
-  font-size: clamp(46px, 11vw, 68px);
-  font-weight: 300;
-  color: #e0e6ed;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  padding: 8px clamp(16px, 3vw, 24px);
   overflow: hidden;
   user-select: text;
-  border-radius: 14px;
-  background: rgba(15, 20, 25, 0.6);
-  box-shadow:
-    inset 0 4px 6px rgba(0, 0, 0, 0.4),
-    inset 0 2px 4px rgba(0, 0, 0, 0.2),
-    0 1px 0 rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  transition: font-size 220ms ease, padding 220ms ease, min-height 220ms ease;
+  min-height: 0;
+}
+
+.calc-expression {
+  font-size: clamp(16px, 4vw, 22px);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.3;
+  white-space: nowrap;
+  min-height: 1.3em;
+  text-align: right;
+  width: 100%;
 }
 
 .calc-display-text {
+  font-size: clamp(52px, 13vw, 80px);
+  font-weight: 300;
+  color: #fff;
   line-height: 1;
   white-space: nowrap;
+  text-align: right;
+  width: 100%;
+  transition: font-size 120ms ease;
+  letter-spacing: -0.02em;
 }
 
+/* ── Keypad ── */
 .calc-keypad {
   min-height: 0;
   display: grid;
@@ -4401,22 +4406,23 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
   grid-template-rows: repeat(5, minmax(0, 1fr));
   gap: var(--calc-gap);
   align-content: stretch;
-  transition: gap 220ms ease, grid-template-columns 220ms ease, grid-template-rows 220ms ease;
+  transition: gap 220ms ease, grid-template-columns 220ms ease;
 }
 
 .calc-row {
   display: contents;
 }
 
+/* ── Buttons — base (number keys) ── */
 .calc-btn {
   appearance: none;
   border: none;
   outline: none;
-  background: linear-gradient(145deg, rgba(60, 65, 75, 1), rgba(40, 45, 55, 1));
-  color: #f0f0f0;
-  font-size: clamp(18px, 5.2vw, 34px);
+  background: var(--calc-num);
+  color: #fff;
+  font-size: clamp(22px, 5.5vw, 34px);
   font-weight: 400;
-  border-radius: clamp(18px, 11vw, 48px);
+  border-radius: 999px;
   cursor: pointer;
   user-select: none;
   display: grid;
@@ -4424,113 +4430,118 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
   width: 100%;
   height: 100%;
   min-height: 0;
-  box-shadow:
-    5px 5px 10px rgba(0, 0, 0, 0.35),
-    -2px -2px 6px rgba(255, 255, 255, 0.06),
-    inset 1px 1px 0 rgba(255, 255, 255, 0.1);
-  transition:
-    transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    background 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    font-size 220ms ease,
-    border-radius 220ms ease;
   position: relative;
-  top: 0;
-}
-
-.calc-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 60%);
-  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, transform 0.1s ease;
 }
 
 .calc-btn:hover {
-  background: linear-gradient(145deg, rgba(70, 75, 85, 1), rgba(45, 50, 60, 1));
-  transform: translateY(-1px);
-  box-shadow:
-    6px 6px 12px rgba(0, 0, 0, 0.4),
-    -2px -2px 7px rgba(255, 255, 255, 0.08),
-    inset 1px 1px 0 rgba(255, 255, 255, 0.15);
+  background: var(--calc-num-hover);
 }
 
 .calc-btn:active {
-  background: #2a2f38;
-  transform: translateY(1px);
-  box-shadow:
-    inset 3px 3px 6px rgba(0, 0, 0, 0.4),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.05),
-    0 1px 0 rgba(255, 255, 255, 0.05);
+  background: var(--calc-num-hover);
+  transform: scale(0.93);
 }
 
+/* ── Operator buttons (orange) ── */
 .calc-btn-op {
-  background: linear-gradient(145deg, rgba(62, 160, 255, 0.35), rgba(30, 100, 200, 0.3));
-  color: var(--glow-blue);
-  text-shadow: 0 0 12px rgba(62, 200, 255, 0.6);
-  box-shadow:
-    5px 5px 12px rgba(0, 0, 0, 0.4),
-    -2px -2px 6px rgba(62, 200, 255, 0.1),
-    inset 1px 1px 0 rgba(62, 200, 255, 0.2);
+  background: var(--calc-op);
+  color: #fff;
+  font-size: clamp(26px, 6.5vw, 40px);
+  font-weight: 300;
 }
 
 .calc-btn-op:hover {
-  background: linear-gradient(145deg, rgba(80, 180, 255, 0.4), rgba(40, 120, 220, 0.35));
-  box-shadow:
-    0 0 20px rgba(62, 200, 255, 0.3),
-    6px 6px 14px rgba(0, 0, 0, 0.4),
-    -2px -2px 8px rgba(62, 200, 255, 0.15);
+  background: var(--calc-op-hover);
 }
 
 .calc-btn-op:active {
-  background: rgba(30, 90, 160, 0.4);
-  box-shadow:
-    inset 3px 3px 8px rgba(0, 0, 0, 0.4),
-    inset -1px -1px 4px rgba(62, 200, 255, 0.1);
+  background: var(--calc-op-hover);
+  transform: scale(0.93);
 }
 
+/* Equals button — green accent */
+.calc-btn-op[data-value="="] {
+  background: var(--calc-eq);
+}
+.calc-btn-op[data-value="="]:hover {
+  background: var(--calc-eq-hover);
+}
+.calc-btn-op[data-value="="]:active {
+  background: var(--calc-eq-hover);
+  transform: scale(0.93);
+}
+
+/* ── Function buttons (AC, +/-, %) — gray ── */
 .calc-btn-special {
-  background: linear-gradient(145deg, rgba(180, 190, 200, 0.2), rgba(140, 150, 160, 0.15));
+  background: var(--calc-fn);
   color: #fff;
-  font-weight: 500;
+  font-weight: 400;
+  font-size: clamp(18px, 4.8vw, 28px);
 }
 
+.calc-btn-special:hover {
+  background: var(--calc-fn-hover);
+}
+
+.calc-btn-special:active {
+  background: var(--calc-fn-hover);
+  transform: scale(0.93);
+}
+
+/* ── Scientific buttons ── */
 .calc-btn-sci {
   display: none;
-  background: linear-gradient(145deg, rgba(40, 40, 40, 0.8), rgba(25, 25, 25, 0.85));
+  background: #1c1c1e;
   font-size: 14px;
   font-weight: 500;
   border-radius: 12px;
-  color: #bbb;
+  color: #aaa;
 }
 
+.calc-btn-sci:hover {
+  background: #2c2c2e;
+}
+
+.calc-btn-sci:active {
+  background: #2c2c2e;
+  transform: scale(0.93);
+}
+
+/* ── Wide button (0) ── */
 .calc-btn-wide {
   grid-column: span 2;
   border-radius: 999px;
-  justify-content: center;
-  padding-left: 0;
+  justify-content: flex-start;
+  padding-left: clamp(24px, 7vw, 36px);
 }
 
+/* ── Landscape — scientific mode ── */
 @media (orientation: landscape) {
   .app-calculator {
-    --calc-gap: 8px;
-    --calc-pad-top: max(8px, calc(env(safe-area-inset-top, 0px) + 4px));
-    --calc-pad-right: max(10px, calc(env(safe-area-inset-right, 0px) + 6px));
-    --calc-pad-bottom: max(10px, calc(env(safe-area-inset-bottom, 0px) + 8px + var(--calc-bottom-obstruction, 0px)));
-    --calc-pad-left: max(10px, calc(env(safe-area-inset-left, 0px) + 6px));
+    --calc-gap: 6px;
+    --calc-pad-top: max(6px, calc(env(safe-area-inset-top, 0px) + 4px));
+    --calc-pad-right: max(8px, calc(env(safe-area-inset-right, 0px) + 4px));
+    --calc-pad-bottom: max(8px, calc(env(safe-area-inset-bottom, 0px) + 6px + var(--calc-bottom-obstruction, 0px)));
+    --calc-pad-left: max(8px, calc(env(safe-area-inset-left, 0px) + 4px));
   }
 
   .app-calculator .calc-shell {
-    grid-template-rows: auto minmax(72px, 0.65fr) minmax(0, 1fr);
+    grid-template-rows: minmax(50px, 0.5fr) minmax(0, 1fr);
+    overflow: hidden;
   }
 
   .calc-display {
-    min-height: 72px;
-    font-size: clamp(34px, 5vw, 46px);
-    padding: 8px 14px;
-    align-items: center;
-    background: rgba(10, 15, 20, 0.7);
+    padding: 4px 10px;
+  }
+
+  .calc-display-text {
+    font-size: clamp(28px, 4.5vw, 42px);
+  }
+
+  .calc-expression {
+    font-size: clamp(12px, 2vw, 16px);
   }
 
   .calc-keypad {
@@ -4539,8 +4550,12 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
   }
 
   .calc-btn {
-    border-radius: 14px;
-    font-size: clamp(14px, 2.3vw, 19px);
+    border-radius: 12px;
+    font-size: clamp(13px, 2vw, 17px);
+  }
+
+  .calc-btn-op {
+    font-size: clamp(15px, 2.3vw, 20px);
   }
 
   .calc-btn-sci {
@@ -4548,110 +4563,32 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
   }
 
   .calc-btn-wide {
-    border-radius: 14px;
+    border-radius: 12px;
+    justify-content: center;
+    padding-left: 0;
   }
 }
 
+/* ── Compact portrait ── */
 @media (max-height: 760px) and (orientation: portrait) {
   .app-calculator {
-    --calc-gap: 7px;
+    --calc-gap: 8px;
     --calc-pad-top: max(8px, calc(env(safe-area-inset-top, 0px) + 4px));
     --calc-pad-bottom: max(10px, calc(env(safe-area-inset-bottom, 0px) + 8px + var(--calc-bottom-obstruction, 0px)));
   }
 
-  .calc-display {
-    min-height: clamp(78px, 17vh, 110px);
-    font-size: clamp(40px, 10vw, 56px);
+  .calc-display-text {
+    font-size: clamp(42px, 11vw, 60px);
   }
 
   .calc-btn {
-    font-size: clamp(17px, 4.9vw, 30px);
+    font-size: clamp(18px, 5vw, 30px);
   }
-}
-
-/* Calculator Header & Power Button */
-.calc-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 4px;
-  height: 30px;
-  margin-bottom: 0;
-  transition: height 220ms ease;
-}
-
-.calc-solar-panel {
-  width: 60px;
-  height: 18px;
-  background: linear-gradient(180deg, #4a3e3e 0%, #3a2e2e 100%);
-  border-radius: 4px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  position: relative;
-  overflow: hidden;
-}
-
-.calc-solar-panel::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(90deg,
-      transparent 0,
-      transparent 14px,
-      rgba(255, 255, 255, 0.05) 15px);
-}
-
-.calc-brand {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.2);
-  font-weight: 600;
-  margin-left: auto;
-  margin-right: 12px;
-}
-
-.calc-power-btn {
-  appearance: none;
-  border: none;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 9px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
-  /* Recessed look */
-  box-shadow:
-    inset 1px 1px 2px rgba(0, 0, 0, 0.5),
-    inset -1px -1px 1px rgba(255, 255, 255, 0.05);
-  background: rgba(0, 0, 0, 0.2);
-  transition: all 0.1s;
-  height: 20px;
-}
-
-.calc-power-btn:hover {
-  color: var(--glow-blue);
-  background: rgba(62, 200, 255, 0.1);
-  box-shadow:
-    inset 1px 1px 2px rgba(0, 0, 0, 0.6),
-    inset -1px -1px 1px rgba(62, 200, 255, 0.1);
-}
-
-.calc-power-btn:active {
-  color: var(--glow-blue);
-  box-shadow:
-    inset 2px 2px 4px rgba(0, 0, 0, 0.6),
-    inset -1px -1px 1px rgba(255, 255, 255, 0.02);
-  transform: translateY(1px);
 }
 
 
 /* ── Notes App ── */
-/* Notes App v1.0 Stable (authoritative) */
+/* Notes App v2.0 — Modern Warm Dark */
 .app-notes {
   display: flex !important;
   flex-direction: column !important;
@@ -4659,12 +4596,10 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
   height: 100%;
   min-height: 0;
   overflow: hidden;
-  color: #f7f8fb;
-  background:
-    radial-gradient(120% 180% at 8% 0%, rgba(32, 53, 93, 0.34), rgba(8, 14, 25, 0) 45%),
-    linear-gradient(165deg, #101929 0%, #0b1423 100%);
-  border: 1px solid rgba(135, 178, 246, 0.18);
-  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.45);
+  color: #f5f0ea;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.6);
 }
 
 .app-notes .notes-header {
@@ -4676,8 +4611,8 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
   gap: 8px;
   padding: calc(env(safe-area-inset-top, 0px) + 10px) 14px 10px;
   min-height: calc(44px + env(safe-area-inset-top, 0px));
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-  border-bottom: 1px solid rgba(126, 171, 244, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .app-notes .notes-header .win-title {
@@ -4744,8 +4679,8 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, rgba(12, 18, 30, 0.98), rgba(9, 14, 25, 0.98));
-  border-right: 1px solid rgba(133, 177, 243, 0.18);
+  background: rgba(18, 18, 18, 0.98);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
 }
 
@@ -4760,21 +4695,25 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
 .app-notes .notes-sb-title {
   font-size: 20px;
   font-weight: 700;
-  letter-spacing: -0.01em;
-  color: #eff5ff;
+  letter-spacing: -0.02em;
+  color: #fff;
 }
 
 .app-notes .notes-add-btn {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border: 0;
-  border-radius: 50%;
-  background: linear-gradient(160deg, #ffc14a, #ff9b2f);
-  color: #172034;
-  font-size: 24px;
+  border-radius: 10px;
+  background: #ff9f0a;
+  color: #000;
+  font-size: 22px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(255, 173, 56, 0.35);
+  transition: transform 0.1s, background 0.15s;
+}
+
+.app-notes .notes-add-btn:active {
+  transform: scale(0.92);
 }
 
 .app-notes .notes-search-container {
@@ -4783,17 +4722,22 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
 
 .app-notes .notes-search {
   width: 100%;
-  border: 1px solid rgba(138, 182, 248, 0.22);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #f2f7ff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #f0ebe5;
   font-size: 14px;
   padding: 10px 12px;
   outline: none;
+  transition: border-color 0.15s;
+}
+
+.app-notes .notes-search:focus {
+  border-color: rgba(255, 159, 10, 0.4);
 }
 
 .app-notes .notes-search::placeholder {
-  color: rgba(235, 241, 255, 0.56);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .app-notes .notes-list {
@@ -4809,11 +4753,11 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
 }
 
 .app-notes .notes-empty-state {
-  margin-top: 18px;
-  border: 1px solid rgba(138, 182, 248, 0.18);
+  margin-top: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 20px;
   display: grid;
   gap: 8px;
 }
@@ -4821,42 +4765,57 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
 .app-notes .notes-empty-state h4 {
   margin: 0;
   font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .app-notes .notes-empty-state p {
   margin: 0;
   font-size: 13px;
-  color: rgba(224, 233, 249, 0.72);
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .app-notes .notes-empty-btn {
-  margin-top: 2px;
-  border: 1px solid rgba(140, 186, 250, 0.32);
+  margin-top: 4px;
+  border: none;
   border-radius: 10px;
-  padding: 8px 12px;
-  color: #f4f8ff;
-  background: rgba(116, 170, 255, 0.18);
-  font-weight: 600;
+  padding: 10px 16px;
+  color: #000;
+  background: #ff9f0a;
+  font-weight: 700;
+  font-size: 13px;
   cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.app-notes .notes-empty-btn:active {
+  transform: scale(0.96);
 }
 
 .app-notes .notes-card {
-  border: 1px solid rgba(138, 182, 248, 0.18);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #eff4ff;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #e8e2da;
   text-align: left;
-  padding: 11px 12px;
+  padding: 12px;
   display: grid;
-  gap: 7px;
+  gap: 6px;
   cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.app-notes .notes-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.app-notes .notes-card:active {
+  transform: scale(0.98);
 }
 
 .app-notes .notes-card.active {
-  border-color: rgba(255, 187, 102, 0.58);
-  background: linear-gradient(165deg, rgba(255, 177, 76, 0.92), rgba(255, 140, 67, 0.9));
-  color: #1f1710;
-  box-shadow: 0 10px 20px rgba(255, 162, 71, 0.28);
+  border-color: rgba(255, 159, 10, 0.5);
+  background: rgba(255, 159, 10, 0.15);
+  color: #fff;
 }
 
 .app-notes .notes-card-head {
@@ -4875,38 +4834,40 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
 }
 
 .app-notes .notes-card-pin {
-  font-size: 11px;
-  color: rgba(255, 214, 137, 0.92);
+  font-size: 10px;
+  font-weight: 600;
+  color: #ff9f0a;
+  letter-spacing: 0.04em;
 }
 
 .app-notes .notes-card.active .notes-card-pin {
-  color: rgba(72, 44, 14, 0.9);
+  color: #ffb840;
 }
 
 .app-notes .notes-card-snippet {
   font-size: 12px;
-  color: rgba(220, 230, 245, 0.76);
+  color: rgba(255, 255, 255, 0.4);
   line-height: 1.45;
 }
 
 .app-notes .notes-card.active .notes-card-snippet {
-  color: rgba(42, 26, 10, 0.86);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .app-notes .notes-card-meta {
   font-size: 11px;
-  color: rgba(198, 212, 236, 0.64);
+  color: rgba(255, 255, 255, 0.25);
 }
 
 .app-notes .notes-card.active .notes-card-meta {
-  color: rgba(57, 35, 13, 0.76);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .app-notes .notes-editor-container {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, rgba(8, 14, 25, 0.98), rgba(6, 12, 22, 0.98));
+  background: #0d0d0d;
   overflow: hidden;
 }
 
@@ -4916,32 +4877,36 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
   display: grid;
   align-content: center;
   justify-items: center;
-  gap: 12px;
+  gap: 14px;
   padding: 24px;
   text-align: center;
 }
 
 .app-notes .notes-editor-empty h3 {
   margin: 0;
-  font-size: 24px;
+  font-size: 22px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .app-notes .notes-editor-empty p {
   margin: 0;
-  max-width: 520px;
-  color: rgba(222, 231, 246, 0.76);
+  max-width: 360px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .app-notes .notes-nav-bar {
   flex: 0 0 auto;
-  min-height: 52px;
+  min-height: 48px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 8px;
-  padding: 8px 10px;
-  border-bottom: 1px solid rgba(130, 176, 245, 0.16);
-  background: rgba(9, 15, 26, 0.94);
+  gap: 6px;
+  padding: 6px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(18, 18, 18, 0.95);
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -4950,16 +4915,26 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
 
 .app-notes .n-nav-btn {
   border: 0;
-  border-radius: 9px;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(234, 243, 255, 0.9);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 12px;
   font-weight: 600;
   padding: 0 12px;
-  min-height: 40px;
+  min-height: 36px;
   cursor: pointer;
   flex: 0 0 auto;
   white-space: nowrap;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+
+.app-notes .n-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.app-notes .n-nav-btn:active {
+  transform: scale(0.95);
 }
 
 .app-notes .n-nav-btn.back {
@@ -4969,32 +4944,38 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
 }
 
 .app-notes .n-nav-btn-primary {
-  background: rgba(81, 143, 255, 0.26);
-  color: #dfeeff;
+  background: rgba(255, 159, 10, 0.18);
+  color: #ff9f0a;
 }
 
 .app-notes .n-nav-btn.pin.is-on {
-  background: rgba(255, 188, 88, 0.24);
-  color: #ffd48a;
+  background: rgba(255, 159, 10, 0.2);
+  color: #ffb840;
 }
 
 .app-notes .n-nav-btn.danger {
-  background: rgba(255, 95, 105, 0.18);
-  color: #ffc3c8;
+  background: rgba(255, 69, 58, 0.15);
+  color: #ff453a;
 }
 
 .app-notes .n-icon-btn {
-  border: 1px solid rgba(135, 180, 246, 0.2);
-  border-radius: 10px;
-  min-height: 44px;
-  padding: 0 12px;
-  background: rgba(255, 255, 255, 0.07);
-  color: #f4f8ff;
-  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 0 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
   flex: 0 0 auto;
+  transition: background 0.15s, color 0.15s;
+}
+
+.app-notes .n-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 .app-notes .notes-paper {
@@ -5002,9 +4983,9 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 10px 14px 8px;
-  background: rgba(7, 12, 22, 0.9);
+  gap: 0;
+  padding: 20px 20px 12px;
+  background: #0d0d0d;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
@@ -5012,31 +4993,33 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
 
 .app-notes .notes-title-input {
   width: 100%;
-  border: 1px solid rgba(135, 180, 246, 0.2);
-  border-radius: 12px;
-  padding: 10px 12px;
-  background: rgba(14, 22, 37, 0.96);
-  color: #f7fafe;
-  font-size: 22px;
+  border: none;
+  border-radius: 0;
+  padding: 0 0 12px;
+  background: transparent;
+  color: #fff;
+  font-size: 28px;
   font-weight: 700;
+  letter-spacing: -0.02em;
   outline: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .app-notes .notes-title-input::placeholder {
-  color: rgba(228, 237, 253, 0.46);
+  color: rgba(255, 255, 255, 0.2);
 }
 
 .app-notes .notes-body-input {
   flex: 1;
   min-height: 0;
   width: 100%;
-  border: 1px solid rgba(135, 180, 246, 0.14);
-  border-radius: 14px;
-  padding: 12px;
-  background: rgba(7, 13, 24, 0.96);
-  color: #eaf1ff;
+  border: none;
+  border-radius: 0;
+  padding: 16px 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.82);
   font-size: 16px;
-  line-height: 1.58;
+  line-height: 1.7;
   resize: none;
   outline: none;
   overflow-y: auto;
@@ -5045,11 +5028,11 @@ body.is-mobile .m-app-layer>.app-window.app-calculator {
 
 .app-notes .notes-status {
   flex: 0 0 auto;
-  font-size: 12px;
-  color: rgba(206, 221, 246, 0.62);
-  border-top: 1px solid rgba(131, 177, 246, 0.13);
-  background: rgba(8, 13, 23, 0.96);
-  padding: 10px 14px max(10px, calc(env(safe-area-inset-bottom, 0px) + 8px));
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(13, 13, 13, 0.98);
+  padding: 8px 20px max(8px, calc(env(safe-area-inset-bottom, 0px) + 6px));
 }
 
 @media (max-width: 920px) {

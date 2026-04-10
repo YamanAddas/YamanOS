@@ -419,11 +419,18 @@ div.boot-screen .boot-text {
 /* ── Glass Chrome (unified app wrapper) ── */
 .glass-chrome {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: var(--z-window);
   display: flex;
   flex-direction: column;
   animation: appSlideIn 0.35s var(--ease-spring) both;
+}
+
+.is-mobile .glass-chrome {
+  bottom: calc(80px + var(--safe-bottom, 0px));
 }
 
 .glass-chrome-header {
@@ -807,6 +814,10 @@ body.in-app .m-search-container {
 
   .m-grid-container {
     bottom: calc(64px + var(--safe-bottom));
+  }
+
+  .is-mobile .glass-chrome {
+    bottom: calc(64px + var(--safe-bottom, 0px));
   }
 }
 
