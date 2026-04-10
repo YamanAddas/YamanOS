@@ -1,6 +1,6 @@
 /**
- * YamanOS Kernel
- * The central nervous system of the OS.
+ * YamanOS v2.0 Kernel
+ * Central nervous system of the OS.
  * Manages boot sequence, services, and global state.
  */
 
@@ -9,6 +9,19 @@ import { ClockService } from './services/clockService.js';
 import { WeatherService } from './services/weatherService.js';
 import { FileSystemService } from './services/fileSystemService.js';
 import { VERSION, BUILD } from './version.js';
+
+// Trusted system events that only the kernel should emit
+const SYSTEM_EVENTS = new Set([
+    'system:ready',
+    'system:panic',
+    'process:kill',
+    'process:started',
+    'process:stopped',
+    'system:app-error',
+    'ui:mount',
+]);
+
+let resizeHandler = null;
 
 export class Kernel {
     constructor() {
@@ -21,23 +34,22 @@ export class Kernel {
             orientation: 'landscape',
             status: 'booting'
         };
-        // ProcessManager must be initialized AFTER bus
         this.processManager = new ProcessManager(this);
     }
 
     registerApps(appList) {
-        this.apps = appList;
+        this.apps = Object.freeze([...appList]);
     }
 
     getApps() {
-        return this.apps;
+        return [...this.apps];
     }
 
     async boot() {
         console.log(`[Kernel] Booting YamanOS ${this.version} (${BUILD})...`);
 
         try {
-            // 1. Initialize Core Services
+            // 1. Initialize Core Services (individually guarded)
             await this.initServices();
 
             // 2. Detect Environment
@@ -56,17 +68,28 @@ export class Kernel {
     }
 
     async initServices() {
-        // Minimal mobile-ready services
-        const clock = new ClockService();
-        this.registerService('clock', clock);
-        this.registerService('weather', new WeatherService());
+        // Each service init is individually guarded so one failure
+        // doesn't prevent the rest from starting
+        try {
+            const clock = new ClockService();
+            this.registerService('clock', clock);
+            if (typeof clock.start === 'function') clock.start();
+        } catch (e) {
+            console.error('[Kernel] ClockService init failed:', e);
+        }
 
-        const fs = new FileSystemService();
-        fs.init();
-        this.registerService('fs', fs);
+        try {
+            this.registerService('weather', new WeatherService());
+        } catch (e) {
+            console.error('[Kernel] WeatherService init failed:', e);
+        }
 
-        if (clock && typeof clock.start === 'function') {
-            clock.start();
+        try {
+            const fs = new FileSystemService();
+            fs.init();
+            this.registerService('fs', fs);
+        } catch (e) {
+            console.error('[Kernel] FileSystemService init failed:', e);
         }
     }
 
@@ -89,12 +112,14 @@ export class Kernel {
             this.emit('display:orientation_change', this.state.orientation);
         };
 
+        // Store ref so we can clean up if needed
+        if (resizeHandler) window.removeEventListener('resize', resizeHandler);
+        resizeHandler = updateOrientation;
         window.addEventListener('resize', updateOrientation);
         updateOrientation();
     }
 
     mountUI() {
-        // Will delegate to specific Shells (Mobile/Desktop)
         this.emit('ui:mount');
     }
 
@@ -110,5 +135,5 @@ export class Kernel {
     }
 }
 
-// Global Singleton
+// Module-scoped singleton — NOT exposed on window
 export const kernel = new Kernel();

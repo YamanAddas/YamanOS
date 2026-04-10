@@ -33,7 +33,6 @@ export class WeatherApp extends App {
         this.renderLocations();
         await this.refreshWeather({ withLoading: true });
         this.bindLiveRefreshEvents();
-        this.bindLiveRefreshEvents();
         this.startAutoRefresh();
 
         // Listen for external unit changes

@@ -63,6 +63,9 @@ export class App {
     destroy() {
         if (this.root) {
             this.root.remove();
+            this.root = null;
         }
+        this.kernel = null;
+        this.pid = null;
     }
 }

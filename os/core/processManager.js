@@ -1,8 +1,30 @@
 
 /**
- * YamanOS v0.6 Process Manager
+ * YamanOS v2.0 Process Manager
  * Handles application lifecycle, isolation, and resource cleanup.
  */
+
+const SAFE_SCHEMES = ['https:', 'http:', 'tel:', 'mailto:', 'sms:'];
+
+function isValidUrl(url) {
+    try {
+        const parsed = new URL(url);
+        return SAFE_SCHEMES.includes(parsed.protocol);
+    } catch {
+        return false;
+    }
+}
+
+function isValidScheme(scheme) {
+    try {
+        const parsed = new URL(scheme);
+        return SAFE_SCHEMES.includes(parsed.protocol);
+    } catch {
+        // Scheme-style URIs like "tel:+123" won't parse as URL,
+        // check if prefix matches allowed schemes
+        return SAFE_SCHEMES.some(s => scheme.startsWith(s));
+    }
+}
 
 export class ProcessManager {
     constructor(kernel) {
@@ -10,6 +32,7 @@ export class ProcessManager {
         this.processes = new Map(); // pid -> process
         this.registry = new Map(); // appId -> AppClass
         this.nextPid = 1000;
+        this._spawning = new Set(); // spawn lock per appId
 
         // Listen for launch requests from UI
         this.kernel.on('app:open', (appId) => this.spawn(appId));
@@ -21,14 +44,19 @@ export class ProcessManager {
     }
 
     async spawn(appId, config = {}) {
+        // Spawn lock: prevent double-tap duplicate instances
+        if (this._spawning.has(appId)) {
+            console.warn(`[ProcessManager] Already spawning: ${appId}`);
+            return -1;
+        }
+
         console.log(`[ProcessManager] Request to spawn: ${appId}`);
 
         // A. Internal App (OS Process) - PRIORITY
-        // If the app is registered internally, we ALWAYS prefer it over external links.
-        // This fixes issues where "Settings" or "Files" tried to open iOS schemes.
         const AppClass = this.registry.get(appId);
 
         if (AppClass) {
+            this._spawning.add(appId);
             const pid = this.nextPid++;
             console.log(`[ProcessManager] Spawning Internal ${appId} (PID: ${pid})`);
 
@@ -41,18 +69,19 @@ export class ProcessManager {
             };
 
             try {
-                // Instantiate App
                 process.instance = new AppClass(this.kernel, pid);
                 this.processes.set(pid, process);
 
-                // Lifecycle: Init
                 await process.instance.init(config || {});
 
+                // Check if killed during init
+                if (!this.processes.has(pid)) {
+                    this._spawning.delete(appId);
+                    return -1;
+                }
+
                 process.state = 'running';
-
-                // Announce to Shells (Payload includes the app instance for mounting)
                 this.kernel.emit('process:started', { pid, appId, app: process.instance });
-
                 return pid;
 
             } catch (e) {
@@ -60,6 +89,8 @@ export class ProcessManager {
                 this.kernel.emit('system:app-error', { appId, message: e?.message || String(e) });
                 this.processes.delete(pid);
                 return -1;
+            } finally {
+                this._spawning.delete(appId);
             }
         }
 
@@ -68,26 +99,27 @@ export class ProcessManager {
         const appMeta = allApps.find(a => a.id === appId);
 
         if (appMeta) {
-            // 1. Native Scheme with Web Fallback (The "Shortcut" Behavior)
+            // 1. Native Scheme with Web Fallback
             if (appMeta.scheme && appMeta.url) {
+                if (!isValidScheme(appMeta.scheme) || !isValidUrl(appMeta.url)) {
+                    console.error(`[ProcessManager] Blocked unsafe URL/scheme for ${appId}`);
+                    return -1;
+                }
                 console.log(`[ProcessManager] Launching Shortcut: ${appMeta.name}`);
-
-                // 1. Try Native App
-                const start = Date.now();
                 window.location.href = appMeta.scheme;
-
-                // 2. Fallback to Web (if detection fails or valid timeout)
                 setTimeout(() => {
-                    const elapsed = Date.now() - start;
                     const c = confirm(`Open ${appMeta.name} in Browser? (Cancel if App opened)`);
-                    if (c) window.open(appMeta.url, '_blank');
+                    if (c) window.open(appMeta.url, '_blank', 'noopener,noreferrer');
                 }, 1500);
-
                 return;
             }
 
             // 2. Pure Native Scheme
             if (appMeta.scheme) {
+                if (!isValidScheme(appMeta.scheme)) {
+                    console.error(`[ProcessManager] Blocked unsafe scheme for ${appId}`);
+                    return -1;
+                }
                 console.log(`[ProcessManager] Native Link: ${appMeta.scheme}`);
                 window.location.href = appMeta.scheme;
                 return;
@@ -95,33 +127,42 @@ export class ProcessManager {
 
             // 3. Pure Web URL
             if (appMeta.url) {
+                if (!isValidUrl(appMeta.url)) {
+                    console.error(`[ProcessManager] Blocked unsafe URL for ${appId}`);
+                    return -1;
+                }
                 console.log(`[ProcessManager] Web Link: ${appMeta.url}`);
-                window.open(appMeta.url, '_blank');
+                window.open(appMeta.url, '_blank', 'noopener,noreferrer');
                 return;
             }
         }
 
         console.warn(`[ProcessManager] App Implementation not found: ${appId}`);
-        return;
+        return -1;
     }
 
-    kill(pid) {
+    async kill(pid) {
         const process = this.processes.get(pid);
         if (!process) return false;
 
         console.log(`[ProcessManager] Killing process ${pid} (${process.name})`);
 
-        // 1. Lifecycle: Dipose
+        // Remove first to prevent re-entrance
+        this.processes.delete(pid);
+
+        // Lifecycle: Dispose (await async cleanup)
         if (process.instance && process.instance.destroy) {
             try {
-                process.instance.destroy();
+                await process.instance.destroy();
             } catch (e) {
                 console.warn(`[ProcessManager] Error disposing ${pid}: `, e);
             }
         }
 
-        // 2. Remove
-        this.processes.delete(pid);
+        // Null out references to aid GC
+        process.instance = null;
+        process.kernel = null;
+
         this.kernel.emit('process:stopped', { pid });
         return true;
     }

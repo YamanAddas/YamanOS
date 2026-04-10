@@ -2,7 +2,7 @@ import { kernel } from './kernel.js';
 import { VERSION, BUILD, ASSET_VERSION } from './version.js';
 import { MobileShell } from './ui/mobileShell.js';
 import { initTheme } from './theme/theme.js';
-// Note: Desktop mode removed - YamanOS is now mobile-only for all devices
+import { initStarfield } from './ui/starfield.js';
 
 
 // Apps
@@ -91,6 +91,7 @@ async function runBootSmokeCheck(shell) {
 
 async function boot() {
   initTheme();
+  initStarfield();
   // SINGLETON GUARD: Prevent multiple boots
   if (window.__YAMANOS_BOOTED__) {
     console.warn('[Boot] Prevented duplicate boot!');
@@ -102,11 +103,6 @@ async function boot() {
   window.__YAMANOS_ASSET_VERSION__ = ASSET_VERSION;
   applyInitialTheme();
   document.title = `YamanOS ${VERSION}`;
-
-  const bootAssetToken = new URL(import.meta.url).searchParams.get('v');
-  if (bootAssetToken && bootAssetToken !== ASSET_VERSION) {
-    console.warn(`[Boot] Asset token mismatch: boot.js?v=${bootAssetToken}, expected ${ASSET_VERSION}`);
-  }
 
   const appShell = document.getElementById("app-shell");
   const bootScreen = document.getElementById("boot");
@@ -191,7 +187,6 @@ async function boot() {
         }
       }
       logStatus(`MobileShell OK (${BUILD})`);
-      window.yamanos = { kernel, shell };
     } else {
       console.error('[Boot] Fatal: #app-shell not found');
       throw new Error("#app-shell not found");

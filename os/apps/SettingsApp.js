@@ -9,6 +9,18 @@ const DOCK_STORAGE_KEY = 'yamanos_dock_items';
 const FOLDER_SEED_KEY = 'yamanos_mobile_seed_v06';
 const HOME_LAYOUT_MODE_KEY = 'yamanos_home_layout_mode';
 const HOME_LAYOUT_APPLIED_KEY = 'yamanos_home_layout_v100';
+const BROWSER_PREFS_KEY = 'yamanos_browser_prefs';
+const BROWSER_STATE_KEY = 'yamanos_browser_v1';
+const LEGACY_BOOKMARKS_KEY = 'yamanos_bookmarks';
+
+function readJson(key, fallback = {}) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
 
 function getBrowserPrefs() {
   const defaults = {

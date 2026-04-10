@@ -252,10 +252,12 @@ export class MinesweeperApp extends App {
         let minesPlaced = 0;
         const total = this.grid.length;
 
+        // Safe zone: clicked cell + all 8 neighbors
+        const safeZone = new Set([safeIndex, ...this.getNeighbors(safeIndex)]);
+
         while (minesPlaced < this.config.mines) {
             const idx = Math.floor(Math.random() * total);
-            // Avoid safe zone (clicked cell and neighbors)
-            if (idx !== safeIndex && !this.grid[idx].mine) { // Simple safe check
+            if (!safeZone.has(idx) && !this.grid[idx].mine) {
                 this.grid[idx].mine = true;
                 minesPlaced++;
             }

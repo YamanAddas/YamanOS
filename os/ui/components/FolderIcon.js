@@ -52,6 +52,11 @@ export class FolderIcon {
     root.addEventListener('pointerleave', onLeave, { passive: true });
     root.addEventListener('pointercancel', onLeave, { passive: true });
 
+    // Store refs for cleanup
+    this._root = root;
+    this._onMove = onMove;
+    this._onLeave = onLeave;
+
     const content = el('div', { class: 'bubbly-icon-content folder-bubbly-content' });
 
     // ── Mini-icon grid (2×2 like iOS) ───────────────────────
@@ -116,5 +121,16 @@ export class FolderIcon {
     // Emoji or text
     cell.appendChild(el('div', { class: 'folder-preview-emoji', title }, iconVal || title.charAt(0) || '📦'));
     return cell;
+  }
+
+  destroy() {
+    if (this._root && this._onMove) {
+      this._root.removeEventListener('pointermove', this._onMove);
+      this._root.removeEventListener('pointerleave', this._onLeave);
+      this._root.removeEventListener('pointercancel', this._onLeave);
+    }
+    this._root = null;
+    this._onMove = null;
+    this._onLeave = null;
   }
 }

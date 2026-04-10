@@ -308,11 +308,12 @@ fitLayout() {
         // Sort by rank to easily assign suits? No, just map them 
         if (difficulty === 1) {
             // All Spades
-            rawCards.forEach(c => c.suit = 'spades');
+            rawCards.forEach(c => { c.suit = 'spades'; c.color = 'black'; });
         } else if (difficulty === 2) {
             // Half Spades, Half Hearts
             rawCards.forEach((c, i) => {
                 c.suit = (i < 52) ? 'spades' : 'hearts';
+                c.color = (i < 52) ? 'black' : 'red';
             });
         } else {
             // 4 Suits - Leave as is (Standard 2 decks)
