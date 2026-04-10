@@ -269,19 +269,21 @@ div.boot-screen .boot-text {
   object-fit: cover;
 }
 
-/* ── Hex App-Specific Backgrounds ── */
-.app-icon-settings .hex-icon-content { background: linear-gradient(135deg, #1a2a4a, #0d1b36); }
-.app-icon-browser .hex-icon-content { background: linear-gradient(135deg, #003d66, #005f99); }
-.app-icon-weather .hex-icon-content { background: linear-gradient(to top, #0a3d6b, #1a6fa0); }
-.app-icon-clock .hex-icon-content { background: radial-gradient(circle, #111e36, #0a1020); }
-.app-icon-notes .hex-icon-content { background: linear-gradient(135deg, #8a6d3b, #3d2e1a); }
+/* ── Hex App-Specific Backgrounds (cosmic dark for Phosphor teal icons) ── */
+.app-icon-settings .hex-icon-content,
+.app-icon-browser .hex-icon-content,
+.app-icon-weather .hex-icon-content,
+.app-icon-notes .hex-icon-content,
 .app-icon-files .hex-icon-content,
-.app-icon-folder .hex-icon-content { background: linear-gradient(135deg, #1a3a5c, #0d2240); }
-.app-icon-calculator .hex-icon-content { background: linear-gradient(135deg, #1a1a2e, #0a0a14); }
+.app-icon-folder .hex-icon-content,
+.app-icon-calculator .hex-icon-content,
+.app-icon-photos .hex-icon-content,
+.app-icon-maps .hex-icon-content {
+  background: linear-gradient(145deg, #0c1628 0%, #081321 60%, #060b14 100%);
+}
+.app-icon-clock .hex-icon-content { background: radial-gradient(circle, #111e36, #0a1020); }
 .app-icon-calendar .hex-icon-content,
-.app-icon-date .hex-icon-content { background: linear-gradient(135deg, #1a2040, #0d1428); }
-.app-icon-photos .hex-icon-content { background: linear-gradient(135deg, #1a2a50, #0d1830); }
-.app-icon-maps .hex-icon-content { background: linear-gradient(135deg, #0d3328, #1a5040); }
+.app-icon-date .hex-icon-content { background: linear-gradient(135deg, #0c1628, #081321); }
 
 /* Game hex backgrounds */
 .app-icon-snake .hex-icon-content { --game-accent: rgba(40,255,170,0.35); }
@@ -518,6 +520,22 @@ div.boot-screen .boot-text {
     opacity: 1;
     transform: scale(1) translateY(0);
   }
+}
+
+/* ── Phosphor Duotone Icons ── */
+.phosphor-wrap {
+  width: 62%;
+  height: 62%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phosphor-wrap svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 6px rgba(0, 229, 193, 0.4))
+          drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 /* ── Smart Search (v2 glass pill) ── */

@@ -1,6 +1,7 @@
 import { el } from "../../utils/dom.js";
 import { FolderIcon } from "../components/FolderIcon.js";
 import { GAME_ICONS } from "../components/GameIcons.js";
+import { PHOSPHOR_ICONS } from "../components/PhosphorIcons.js";
 
 /**
  * SmartIcon Component — v2.0 Hex
@@ -32,26 +33,14 @@ export class SmartIcon {
             return folderIcon.render();
         }
 
-        if (this.appId === "clock") {
+        // Phosphor duotone icons for standard apps
+        const phosphorKey = SmartIcon._phosphorMap[this.appId];
+        if (phosphorKey && PHOSPHOR_ICONS[phosphorKey]) {
+            this._renderPhosphor(contentWrapper, phosphorKey);
+        } else if (this.appId === "clock") {
             this.renderClock(contentWrapper);
-        } else if (this.appId === "weather") {
-            this.renderWeather(contentWrapper);
-        } else if (this.appId === "photos") {
-            this.renderPhotos(contentWrapper);
-        } else if (this.appId === "maps") {
-            this.renderMaps(contentWrapper);
-        } else if (this.appId === "settings") {
-            this.renderSettings(contentWrapper);
-        } else if (this.appId === "browser") {
-            this.renderBrowser(contentWrapper);
-        } else if (this.appId === "notes") {
-            this.renderNotes(contentWrapper);
-        } else if (this.appId === "files" || this.appId === "folder") {
-            this.renderFiles(contentWrapper);
         } else if (this._renderGameIcon(contentWrapper)) {
             // Handled by unified game icon renderer
-        } else if (this.appId === "calculator") {
-            this.renderCalculator(contentWrapper);
         } else if (this.appId === "calendar" || this.appId === "date") {
             this.renderCalendar(contentWrapper);
         } else {
@@ -309,6 +298,24 @@ export class SmartIcon {
     /* =========================
        GAME ICONS — unified renderer from GameIcons.js
        ========================= */
+
+    /** Map appId to PHOSPHOR_ICONS key */
+    static _phosphorMap = {
+      calculator: 'calculator', browser: 'browser', settings: 'settings',
+      weather: 'weather', notes: 'notes', files: 'files', folder: 'files',
+      maps: 'maps', photos: 'photos',
+    };
+
+    /** Render a Phosphor duotone icon */
+    _renderPhosphor(container, key) {
+        container.classList.add('phosphor-icon');
+        container.style.display = 'flex';
+        container.style.alignItems = 'center';
+        container.style.justifyContent = 'center';
+        const wrap = el('div', { class: 'phosphor-wrap' });
+        wrap.innerHTML = PHOSPHOR_ICONS[key];
+        container.appendChild(wrap);
+    }
 
     /** Map appId to GAME_ICONS key (handles spider-solitaire → spider) */
     static _gameIdMap = {

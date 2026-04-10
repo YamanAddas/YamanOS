@@ -103,8 +103,7 @@
 /* === APP SPECIFIC STYLES === */
 
 /* Settings - Metal Gear */
-.app-icon-settings .bubbly-icon-content,
-.app-icon-settings .hex-icon-content {
+.app-icon-settings .bubbly-icon-content {
     background: linear-gradient(135deg, #4b6cb7, #182848);
     display: flex;
     align-items: center;
@@ -157,8 +156,7 @@
 }
 
 /* Browser - 3D Globe */
-.app-icon-browser .bubbly-icon-content,
-.app-icon-browser .hex-icon-content {
+.app-icon-browser .bubbly-icon-content {
     background: linear-gradient(135deg, #00c6ff, #0072ff);
     display: flex;
     align-items: center;
@@ -211,9 +209,7 @@
 
 /* FILES (Blue Glass Folder) - Max Visibility */
 .app-icon-files .bubbly-icon-content,
-.app-icon-folder .bubbly-icon-content,
-.app-icon-files .hex-icon-content,
-.app-icon-folder .hex-icon-content {
+.app-icon-folder .bubbly-icon-content {
     background: linear-gradient(135deg, #2980b9, #6dd5fa);
     display: flex;
     align-items: center;
@@ -265,8 +261,7 @@
 }
 
 /* CALCULATOR — Icon fit hardened (no bottom cut) */
-.app-icon-calculator .bubbly-icon-content,
-.app-icon-calculator .hex-icon-content{
+.app-icon-calculator .bubbly-icon-content {
     background: linear-gradient(135deg, #2d3436, #000000);
     display:flex;
     flex-direction:column;
@@ -333,8 +328,7 @@
 
 
 /* WEATHER - Distinct Elements */
-.app-icon-weather .bubbly-icon-content,
-.app-icon-weather .hex-icon-content {
+.app-icon-weather .bubbly-icon-content {
     background: linear-gradient(to top, #4facfe, #00f2fe);
     position: relative;
     overflow: hidden;
@@ -416,8 +410,7 @@
 }
 
 /* CLOCK - Mobile Optimized & Visible Markings */
-.app-icon-clock .bubbly-icon-content,
-.app-icon-clock .hex-icon-content {
+.app-icon-clock .bubbly-icon-content {
     background: radial-gradient(circle, #232526, #414345);
     display: flex;
     justify-content: center;
@@ -503,8 +496,7 @@
 }
 
 /* NOTES - Solid Paper Stack */
-.app-icon-notes .bubbly-icon-content,
-.app-icon-notes .hex-icon-content {
+.app-icon-notes .bubbly-icon-content {
     background: linear-gradient(135deg, #fce38a, #f38181);
     display: flex;
     align-items: center;
